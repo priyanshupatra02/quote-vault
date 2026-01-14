@@ -1,0 +1,56 @@
+name: quote_vault
+description: ""
+version: 1.0.0+1
+publish_to: none
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  auto_route: ^11.1.0
+  dio: ^5.9.0
+  dio_smart_retry: ^7.0.1
+  duration: ^4.0.3
+  flash: ^3.1.1
+  flex_color_scheme: ^8.4.0
+  flutter:
+    sdk: flutter
+
+  flutter_displaymode: ^0.7.0
+  flutter_localizations:
+    sdk: flutter
+  flutter_riverpod: ^2.6.1
+  flutter_secure_storage_x: ^12.0.0
+  flutter_svg: ^2.2.3
+  google_fonts: ^7.0.2
+  hive_ce_flutter: ^2.3.4
+  internet_connection_checker_plus: ^2.9.1+2
+  intl: ^0.20.2
+  multiple_result: ^5.2.0
+  path_provider: ^2.1.5
+  platform_info: ^5.0.0
+  responsive_framework:
+    git: https://github.com/Shreemanarjun/ResponsiveFramework.git
+  slang: ^4.11.2
+  slang_flutter: ^4.11.0
+  talker_dio_logger: ^5.1.10
+  talker_flutter: ^5.1.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  auto_route_generator: ^10.2.4
+  build_runner: ^2.5.4
+  custom_lint: ^0.8.0
+  flutter_lints: ^6.0.0
+  mocktail: ^1.0.4
+  slang_build_runner: ^4.11.0
+  spot: ^0.18.0
+  very_good_analysis: ^10.0.0
+
+
+
+
+
+flutter:
+  uses-material-design: true
