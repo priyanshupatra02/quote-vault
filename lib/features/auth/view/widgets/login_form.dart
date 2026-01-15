@@ -1,18 +1,20 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/auth/controller/auth_controller.dart';
 import 'package:quote_vault/features/auth/view/widgets/auth_input_fields.dart';
 
-class LoginForm extends StatefulWidget {
+class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  ConsumerState<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormState extends ConsumerState<LoginForm> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
@@ -24,8 +26,42 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  Future<void> _handleLogin() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    await ref.read(authControllerProvider.notifier).signIn(
+          email: email,
+          password: password,
+        );
+
+    // Check state after async
+    if (!mounted) return;
+
+    final state = ref.read(authControllerProvider);
+    state.whenOrNull(error: (error, stack) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login Failed: ${error.toString()}')),
+      );
+    }, data: (user) {
+      if (user != null) {
+        context.router.replace(const DiscoverRoute());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authControllerProvider);
+    final isLoading = authState.isLoading;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,11 +111,7 @@ class _LoginFormState extends State<LoginForm> {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
-            onPressed: () {
-              // TODO: Implement Login Logic
-              // Navigate to Home/Settings on success
-              // context.router.replace(const SettingsRoute());
-            },
+            onPressed: isLoading ? null : _handleLogin,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               foregroundColor: Colors.white,
@@ -88,14 +120,20 @@ class _LoginFormState extends State<LoginForm> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: Text(
-              'Log In',
-              style: AppTextStyles.buttonText.copyWith(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                  )
+                : Text(
+                    'Log In',
+                    style: AppTextStyles.buttonText.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
           ),
         ),
       ],

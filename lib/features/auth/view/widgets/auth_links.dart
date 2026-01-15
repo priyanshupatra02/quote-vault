@@ -21,7 +21,7 @@ class SignUpLink extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            context.router.replace(const SignUpRoute());
+            context.router.push(const SignUpRoute());
           },
           child: Text(
             'Sign Up',
@@ -54,7 +54,7 @@ class LoginLink extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            context.router.replace(const LoginRoute());
+            context.router.push(const LoginRoute());
           },
           child: Text(
             'Log In',

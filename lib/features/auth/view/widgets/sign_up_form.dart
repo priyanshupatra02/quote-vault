@@ -1,16 +1,20 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/auth/controller/auth_controller.dart';
 import 'package:quote_vault/features/auth/view/widgets/auth_input_fields.dart';
 
-class SignUpForm extends StatefulWidget {
+class SignUpForm extends ConsumerStatefulWidget {
   const SignUpForm({super.key});
 
   @override
-  State<SignUpForm> createState() => _SignUpFormState();
+  ConsumerState<SignUpForm> createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignUpFormState extends ConsumerState<SignUpForm> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -24,8 +28,45 @@ class _SignUpFormState extends State<SignUpForm> {
     super.dispose();
   }
 
+  Future<void> _handleSignUp() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill in all fields')),
+      );
+      return;
+    }
+
+    await ref.read(authControllerProvider.notifier).signUp(
+          email: email,
+          password: password,
+        );
+
+    // Check state after async
+    if (!mounted) return;
+
+    final state = ref.read(authControllerProvider);
+    state.whenOrNull(error: (error, stack) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign Up Failed: ${error.toString()}')),
+      );
+    }, data: (user) {
+      if (user != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Sign Up Successful!')),
+        );
+        context.router.replace(const DiscoverRoute());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authControllerProvider);
+    final isLoading = authState.isLoading;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -80,7 +121,7 @@ class _SignUpFormState extends State<SignUpForm> {
         ),
         const SizedBox(height: 24),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: isLoading ? null : _handleSignUp,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
@@ -91,14 +132,20 @@ class _SignUpFormState extends State<SignUpForm> {
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
-            'Create Account',
-            style: AppTextStyles.display.copyWith(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
+          child: isLoading
+              ? const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                )
+              : Text(
+                  'Create Account',
+                  style: AppTextStyles.display.copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
         ),
       ],
     );
