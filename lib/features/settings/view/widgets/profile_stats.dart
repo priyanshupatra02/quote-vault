@@ -10,8 +10,7 @@ class ProfileStats extends StatelessWidget {
     return Row(
       children: [
         Expanded(
-            child: _buildStatCard(
-          context,
+            child: ProfileStatCard(
           icon: Icons.local_fire_department,
           iconColor: Colors.orange,
           bgIconColor: Colors.orange.withOpacity(0.1),
@@ -21,8 +20,7 @@ class ProfileStats extends StatelessWidget {
         )),
         const SizedBox(width: 16),
         Expanded(
-            child: _buildStatCard(
-          context,
+            child: ProfileStatCard(
           icon: Icons.format_quote,
           iconColor: AppColors.primary,
           bgIconColor: AppColors.primary.withOpacity(0.1),
@@ -33,16 +31,28 @@ class ProfileStats extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildStatCard(
-    BuildContext context, {
-    required IconData icon,
-    required Color iconColor,
-    required Color bgIconColor,
-    required String badgeText,
-    required String value,
-    required String label,
-  }) {
+class ProfileStatCard extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final Color bgIconColor;
+  final String badgeText;
+  final String value;
+  final String label;
+
+  const ProfileStatCard({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.bgIconColor,
+    required this.badgeText,
+    required this.value,
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(

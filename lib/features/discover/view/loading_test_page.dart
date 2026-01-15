@@ -64,11 +64,11 @@ class LoadingTestPage extends StatelessWidget {
             right: 20,
             child: Column(
               children: [
-                _buildLoadingButton(),
+                const _LoadingButton(),
                 const SizedBox(height: 24),
-                _buildLoadingButton(),
+                const _LoadingButton(),
                 const SizedBox(height: 24),
-                _buildLoadingButton(),
+                const _LoadingButton(),
               ],
             ),
           ),
@@ -83,8 +83,13 @@ class LoadingTestPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildLoadingButton() {
+class _LoadingButton extends StatelessWidget {
+  const _LoadingButton();
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 48,
       height: 48,

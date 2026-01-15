@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 
@@ -110,19 +111,14 @@ class _SocialButton extends StatelessWidget {
   }
 }
 
-// Simple Custom Icons to avoid extra assets for now
 class _GoogleIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Basic representation or SVG path could be used here.
-    // For now, using a colored 'G' text or Icon if available, but designs usually need the logo.
-    // I'll implement a simple colored G using text for simplicity or standard icon if available.
-    // Ideally SVG. Let's use a placeholder Icon or Text.
-    // Better: SVG Paths from the HTML instructions.
-    // Since I can't easily paste SVG path string to IconData, I'll use CustomPaint or just text "G" for now?
-    // Wait, I can use an Image.network or local asset if available.
-    // I'll double check assets. If no assets, I'll use text.
-    return const Icon(Icons.g_mobiledata, size: 28, color: Colors.blue); // Placeholder
+    return SvgPicture.asset(
+      'assets/icons/google_logo.svg',
+      width: 24,
+      height: 24,
+    );
   }
 }
 
@@ -132,7 +128,11 @@ class _XIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Icon(Icons.close,
-        size: 20, color: color); // X logo usually looks like close or distinct X
+    return SvgPicture.asset(
+      'assets/icons/x_logo.svg',
+      width: 20,
+      height: 20,
+      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+    );
   }
 }

@@ -15,17 +15,50 @@ class EditorToolbar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildItem(context, Icons.text_fields, 'Type', true),
-          _buildItem(context, Icons.wallpaper, 'Back', false),
-          _buildItem(context, Icons.auto_awesome, 'Effects', false),
-          _buildItem(context, Icons.grid_view, 'Layout', false),
-          _buildItem(context, Icons.person, 'Author', false),
+          const _EditorToolbarItem(
+            icon: Icons.text_fields,
+            label: 'Type',
+            isActive: true,
+          ),
+          const _EditorToolbarItem(
+            icon: Icons.wallpaper,
+            label: 'Back',
+            isActive: false,
+          ),
+          const _EditorToolbarItem(
+            icon: Icons.auto_awesome,
+            label: 'Effects',
+            isActive: false,
+          ),
+          const _EditorToolbarItem(
+            icon: Icons.grid_view,
+            label: 'Layout',
+            isActive: false,
+          ),
+          const _EditorToolbarItem(
+            icon: Icons.person,
+            label: 'Author',
+            isActive: false,
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildItem(BuildContext context, IconData icon, String label, bool isActive) {
+class _EditorToolbarItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isActive;
+
+  const _EditorToolbarItem({
+    required this.icon,
+    required this.label,
+    required this.isActive,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

@@ -8,34 +8,44 @@ class ActionSidebar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        _buildActionButton(
+        SidebarActionButton(
           icon: Icons.favorite,
           label: '12k',
           isLiked: true, // Example state
         ),
-        const SizedBox(height: 24),
-        _buildActionButton(
+        SizedBox(height: 24),
+        SidebarActionButton(
           icon: Icons.bookmark_border,
           label: 'Save',
         ),
-        const SizedBox(height: 24),
-        _buildActionButton(
+        SizedBox(height: 24),
+        SidebarActionButton(
           icon: Icons.ios_share, // or simple share
           label: 'Share',
         ),
       ],
     );
   }
+}
 
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    bool isLiked = false,
-  }) {
+class SidebarActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isLiked;
+
+  const SidebarActionButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.isLiked = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Container(

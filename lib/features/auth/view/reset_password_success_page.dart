@@ -110,7 +110,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
-                              foregroundColor: const Color(0xFF231e0f), // Dark text on yellow
+                              foregroundColor: Colors.white,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12), // rounded-xl
@@ -122,7 +122,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                               style: AppTextStyles.buttonText.copyWith(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF231e0f), // Ensure contrast
+                                color: Colors.white,
                               ),
                             ),
                           ),

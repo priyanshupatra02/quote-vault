@@ -53,8 +53,7 @@ class CustomBottomNavBar extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildNavItem(
-                  context: context,
+                BottomNavItem(
                   icon: Icons.home,
                   label: 'Home',
                   isActive: activeIndex == 0,
@@ -65,8 +64,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     }
                   },
                 ),
-                _buildNavItem(
-                  context: context,
+                BottomNavItem(
                   icon: Icons.explore,
                   label: 'Explore',
                   isActive: activeIndex == 1,
@@ -77,8 +75,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     }
                   },
                 ),
-                _buildNavItem(
-                  context: context,
+                BottomNavItem(
                   icon: Icons.bookmarks,
                   label:
                       'Vault', // "Saved" or "Vault" per text. Design text says "Vault" in one place, "Saved" in another. "Vault" is distinct.
@@ -89,8 +86,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     }
                   },
                 ),
-                _buildNavItem(
-                  context: context,
+                BottomNavItem(
                   icon: Icons.settings,
                   label: 'Settings',
                   isActive: activeIndex == 3,
@@ -107,14 +103,24 @@ class CustomBottomNavBar extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildNavItem({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required bool isActive,
-    required VoidCallback onTap,
-  }) {
+class BottomNavItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const BottomNavItem({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final inactiveColor = isDark ? Colors.white60 : Colors.black45;
 

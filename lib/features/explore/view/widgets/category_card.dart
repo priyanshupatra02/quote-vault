@@ -87,15 +87,25 @@ class CategoryCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            _buildIcon(),
+                            _CategoryIcon(
+                              icon: icon,
+                              accentColor: accentColor,
+                              isWide: isWide,
+                            ),
                             const SizedBox(width: 16),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildTitle(),
+                                _CategoryTitle(
+                                  title: title,
+                                  isWide: isWide,
+                                ),
                                 const SizedBox(height: 2),
-                                _buildSubtitle(),
+                                _CategorySubtitle(
+                                  subtitle: subtitle,
+                                  isWide: isWide,
+                                ),
                               ],
                             ),
                           ],
@@ -119,13 +129,23 @@ class CategoryCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildIcon(),
+                        _CategoryIcon(
+                          icon: icon,
+                          accentColor: accentColor,
+                          isWide: isWide,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildTitle(),
+                            _CategoryTitle(
+                              title: title,
+                              isWide: isWide,
+                            ),
                             const SizedBox(height: 2),
-                            _buildSubtitle(),
+                            _CategorySubtitle(
+                              subtitle: subtitle,
+                              isWide: isWide,
+                            ),
                           ],
                         ),
                       ],
@@ -136,8 +156,21 @@ class CategoryCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildIcon() {
+class _CategoryIcon extends StatelessWidget {
+  final IconData icon;
+  final Color accentColor;
+  final bool isWide;
+
+  const _CategoryIcon({
+    required this.icon,
+    required this.accentColor,
+    required this.isWide,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: isWide ? 48 : 40,
       height: isWide ? 48 : 40,
@@ -157,8 +190,19 @@ class CategoryCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildTitle() {
+class _CategoryTitle extends StatelessWidget {
+  final String title;
+  final bool isWide;
+
+  const _CategoryTitle({
+    required this.title,
+    required this.isWide,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
       title,
       style: AppTextStyles.serif.copyWith(
@@ -167,8 +211,19 @@ class CategoryCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildSubtitle() {
+class _CategorySubtitle extends StatelessWidget {
+  final String subtitle;
+  final bool isWide;
+
+  const _CategorySubtitle({
+    required this.subtitle,
+    required this.isWide,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
       subtitle,
       style: AppTextStyles.display.copyWith(

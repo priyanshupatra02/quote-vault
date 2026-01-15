@@ -52,9 +52,9 @@ class FeaturedAuthorsList extends StatelessWidget {
               // Keeping it simple for now as per image logic often implying horizontal scroll
               Row(
                 children: [
-                  _buildArrowButton(Icons.arrow_back, false),
-                  const SizedBox(width: 8),
-                  _buildArrowButton(Icons.arrow_forward, true),
+                  ArrowButton(icon: Icons.arrow_back, filled: false),
+                  SizedBox(width: 8),
+                  ArrowButton(icon: Icons.arrow_forward, filled: true),
                 ],
               )
             ],
@@ -122,8 +122,20 @@ class FeaturedAuthorsList extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget _buildArrowButton(IconData icon, bool filled) {
+class ArrowButton extends StatelessWidget {
+  final IconData icon;
+  final bool filled;
+
+  const ArrowButton({
+    super.key,
+    required this.icon,
+    required this.filled,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       width: 32,
       height: 32,

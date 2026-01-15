@@ -13,17 +13,28 @@ class FilterChipsRow extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.zero,
         children: [
-          _buildActiveChip('Author: Confucius'),
+          const _ActiveFilterChip(label: 'Author: Confucius'),
           const SizedBox(width: 8),
-          _buildDropdownChip('Topic'),
+          const _DropdownFilterChip(label: 'Topic'),
           const SizedBox(width: 8),
-          _buildDropdownChip('Length'),
+          const _DropdownFilterChip(label: 'Length'),
         ],
       ),
     );
   }
+}
 
-  Widget _buildActiveChip(String label) {
+class _ActiveFilterChip extends StatelessWidget {
+  final String label;
+  final VoidCallback? onRemoved;
+
+  const _ActiveFilterChip({
+    required this.label,
+    this.onRemoved,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.only(left: 12, right: 4, top: 4, bottom: 4),
       decoration: BoxDecoration(
@@ -53,7 +64,7 @@ class FilterChipsRow extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {},
+              onTap: onRemoved ?? () {},
               borderRadius: BorderRadius.circular(999),
               child: Padding(
                 padding: const EdgeInsets.all(2.0),
@@ -69,8 +80,17 @@ class FilterChipsRow extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _buildDropdownChip(String label) {
+class _DropdownFilterChip extends StatelessWidget {
+  final String label;
+
+  const _DropdownFilterChip({
+    required this.label,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(

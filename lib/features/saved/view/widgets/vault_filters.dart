@@ -25,23 +25,55 @@ class _VaultFiltersState extends State<VaultFilters> {
       ),
       child: Row(
         children: [
-          _buildFilterOption('All'),
-          _buildFilterOption('Favorites'),
-          _buildFilterOption('Folders'),
+          _VaultFilterOption(
+            label: 'All',
+            isSelected: selectedFilter == 'All',
+            onTap: () {
+              setState(() {
+                selectedFilter = 'All';
+              });
+            },
+          ),
+          _VaultFilterOption(
+            label: 'Favorites',
+            isSelected: selectedFilter == 'Favorites',
+            onTap: () {
+              setState(() {
+                selectedFilter = 'Favorites';
+              });
+            },
+          ),
+          _VaultFilterOption(
+            label: 'Folders',
+            isSelected: selectedFilter == 'Folders',
+            onTap: () {
+              setState(() {
+                selectedFilter = 'Folders';
+              });
+            },
+          ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildFilterOption(String label) {
-    final isSelected = selectedFilter == label;
+class _VaultFilterOption extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _VaultFilterOption({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedFilter = label;
-          });
-        },
+        onTap: onTap,
         child: Container(
           height: 32, // h-10 w padding adjustments
           alignment: Alignment.center,

@@ -2,19 +2,19 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
-import 'package:quote_vault/features/auth/view/widgets/sign_up_form.dart';
-import 'package:quote_vault/features/auth/view/widgets/sign_up_header.dart';
+import 'package:quote_vault/features/auth/view/widgets/login_form.dart';
+import 'package:quote_vault/features/auth/view/widgets/login_header.dart';
 import 'package:quote_vault/features/auth/view/widgets/social_auth_buttons.dart';
 
 @RoutePage()
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // Determine screen height to ensure min-height behavior
     final screenHeight = MediaQuery.of(context).size.height;
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -22,10 +22,10 @@ class SignUpPage extends StatelessWidget {
       backgroundColor: AppColors.background(context),
       body: Stack(
         children: [
-          // Background Gradient Orbs
+          // Background Gradient Orbs (Same as SignUpPage for consistency)
           Positioned(
             top: -100,
-            right: -100,
+            left: -100,
             child: Container(
               width: 300,
               height: 300,
@@ -40,8 +40,8 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 150,
-            left: -80,
+            bottom: 100,
+            right: -80,
             child: Container(
               width: 300,
               height: 300,
@@ -62,7 +62,7 @@ class SignUpPage extends StatelessWidget {
                 physics: const ClampingScrollPhysics(),
                 child: Container(
                   constraints: BoxConstraints(
-                    maxWidth: 450, // Max width for tablet/web
+                    maxWidth: 450,
                     minHeight: screenHeight -
                         MediaQuery.of(context).padding.top -
                         MediaQuery.of(context).padding.bottom,
@@ -71,13 +71,13 @@ class SignUpPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const SignUpHeader(),
+                      const LoginHeader(),
                       const SizedBox(height: 32),
-                      const SignUpForm(),
-                      const SizedBox(height: 32),
+                      const LoginForm(),
+                      const SizedBox(height: 24),
                       const SocialAuthButtons(),
                       const SizedBox(height: 32),
-                      const _LoginLink(),
+                      const _SignUpLink(),
                     ],
                   ),
                 ),
@@ -90,8 +90,8 @@ class SignUpPage extends StatelessWidget {
   }
 }
 
-class _LoginLink extends StatelessWidget {
-  const _LoginLink();
+class _SignUpLink extends StatelessWidget {
+  const _SignUpLink();
 
   @override
   Widget build(BuildContext context) {
@@ -99,16 +99,18 @@ class _LoginLink extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
-          'Already a member? ',
+          "Don't have an account? ",
           style: AppTextStyles.display.copyWith(
             color: Colors.grey.shade500,
             fontSize: 14,
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            context.router.replace(const SignUpRoute());
+          },
           child: Text(
-            'Log In',
+            'Sign Up',
             style: AppTextStyles.display.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.bold,

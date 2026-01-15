@@ -35,16 +35,14 @@ class SettingsList extends ConsumerWidget {
           ),
           child: Column(
             children: [
-              _buildItem(
-                context,
+              SettingsListItem(
                 title: 'Notifications',
                 icon: Icons.notifications,
                 iconColor: Colors.redAccent,
                 bgIconColor: Colors.redAccent.withOpacity(0.1),
               ),
               _Divider(),
-              _buildItem(
-                context,
+              SettingsListItem(
                 title: 'Appearance',
                 icon: Icons.dark_mode,
                 iconColor: Colors.blueAccent,
@@ -72,16 +70,14 @@ class SettingsList extends ConsumerWidget {
                 ),
               ),
               _Divider(),
-              _buildItem(
-                context,
+              SettingsListItem(
                 title: 'Privacy & Data',
                 icon: Icons.lock,
                 iconColor: Colors.greenAccent,
                 bgIconColor: Colors.greenAccent.withOpacity(0.1),
               ),
               _Divider(),
-              _buildItem(
-                context,
+              SettingsListItem(
                 title: 'Account',
                 icon: Icons.person,
                 iconColor: Colors.grey,
@@ -93,15 +89,26 @@ class SettingsList extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Widget _buildItem(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required Color iconColor,
-    required Color bgIconColor,
-    Widget? trailing,
-  }) {
+class SettingsListItem extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final Color iconColor;
+  final Color bgIconColor;
+  final Widget? trailing;
+
+  const SettingsListItem({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.iconColor,
+    required this.bgIconColor,
+    this.trailing,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Material(
       // For ink ripple if needed
       color: Colors.transparent,

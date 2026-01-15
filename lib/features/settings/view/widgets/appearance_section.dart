@@ -107,11 +107,11 @@ class AppearanceSection extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        _buildColorOption(const Color(0xFFFFD700), false), // Gold
+                        const _ColorOption(color: Color(0xFFFFD700), isSelected: false), // Gold
                         const SizedBox(width: 16),
-                        _buildColorOption(const Color(0xFF000080), true), // Navy (Selected mockup)
+                        const _ColorOption(color: Color(0xFF000080), isSelected: true), // Navy (Selected mockup)
                         const SizedBox(width: 16),
-                        _buildColorOption(const Color(0xFF50C878), false), // Emerald
+                        const _ColorOption(color: Color(0xFF50C878), isSelected: false), // Emerald
                       ],
                     ),
                   ],
@@ -123,8 +123,19 @@ class AppearanceSection extends ConsumerWidget {
       ],
     );
   }
+}
 
-  Widget _buildColorOption(Color color, bool isSelected) {
+class _ColorOption extends StatelessWidget {
+  final Color color;
+  final bool isSelected;
+
+  const _ColorOption({
+    required this.color,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [

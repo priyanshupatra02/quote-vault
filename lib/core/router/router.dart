@@ -23,6 +23,11 @@ class AppRouter extends RootStackRouter {
       path: '/editor',
     ),
     AutoRoute(
+      page: LoginRoute.page,
+      path: '/login',
+      initial: true,
+    ),
+    AutoRoute(
       page: ForgotPasswordRoute.page,
       path: '/forgot-password',
     ),
@@ -33,7 +38,6 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: ResetPasswordSuccessRoute.page,
       path: '/reset-password-success',
-      initial: true,
     ),
     AutoRoute(
       page: SignUpRoute.page,
