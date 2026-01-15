@@ -1,7 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/core/theme/app_colors.dart';
 
 class ActionSidebar extends StatelessWidget {
   const ActionSidebar({super.key});
@@ -13,18 +13,18 @@ class ActionSidebar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         SidebarActionButton(
-          icon: Icons.favorite,
-          label: '12k',
-          isLiked: true, // Example state
+          icon: Icons.favorite_border,
+          label: '12.4k',
+          isLiked: false,
         ),
-        SizedBox(height: 24),
+        SizedBox(height: 20),
         SidebarActionButton(
           icon: Icons.bookmark_border,
           label: 'Save',
         ),
-        SizedBox(height: 24),
+        SizedBox(height: 20),
         SidebarActionButton(
-          icon: Icons.ios_share, // or simple share
+          icon: Icons.ios_share,
           label: 'Share',
         ),
       ],
@@ -46,6 +46,14 @@ class SidebarActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = AppColors.text(context);
+
+    // Light mode: white/40 bg with backdrop blur (from HTML)
+    // Dark mode: white/5 bg with backdrop blur
+    final containerColor = isDark ? Colors.white.withOpacity(0.05) : Colors.white.withOpacity(0.4);
+    final borderColor = isDark ? Colors.white.withOpacity(0.1) : Colors.black.withOpacity(0.05);
+
     return Column(
       children: [
         Container(
@@ -53,37 +61,42 @@ class SidebarActionButton extends StatelessWidget {
           height: 48,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.white.withOpacity(0.05),
+            color: containerColor,
             border: Border.all(
-              color: Colors.white.withOpacity(0.1),
+              color: borderColor,
               width: 1,
             ),
+            boxShadow: isDark
+                ? null
+                : [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.04),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
           ),
           child: ClipOval(
             child: BackdropFilter(
-              filter: ui.ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              filter: ui.ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Center(
                 child: Icon(
-                  icon,
-                  color: isLiked ? Colors.red[400] : Colors.white,
+                  isLiked ? Icons.favorite : icon,
+                  color: isLiked ? Colors.red[400] : iconColor,
                   size: 24,
                 ),
               ),
             ),
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyles.buttonText.copyWith(
-            color: Colors.white.withOpacity(0.6),
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.2),
-                offset: const Offset(0, 1),
-                blurRadius: 2,
-              ),
-            ],
+          style: TextStyle(
+            fontFamily: 'Inter',
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+            color: AppColors.textSecondary(context).withOpacity(isDark ? 0.6 : 0.5),
           ),
         ),
       ],

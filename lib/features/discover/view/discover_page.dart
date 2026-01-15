@@ -2,7 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:quote_vault/features/discover/view/widgets/action_sidebar.dart';
 import 'package:quote_vault/features/discover/view/widgets/background_layer.dart';
-import 'package:quote_vault/features/discover/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:quote_vault/features/discover/view/widgets/daily_insight_badge.dart';
 import 'package:quote_vault/features/discover/view/widgets/quote_display.dart';
 
@@ -41,27 +40,17 @@ class DiscoverPage extends StatelessWidget {
                   ),
                 ),
 
-                // Bottom Spacer to accommodate Navbar + Actions
-                // Sidebar overlaps, Navbar is fixed at bottom
-                // We add space here so scrollable content wouldn't hide behind nav
-                SizedBox(height: 100),
+                // Bottom Spacer (reduced since navbar is now at parent level)
+                SizedBox(height: 20),
               ],
             ),
           ),
 
           // 3. Floating Action Sidebar (Right Side)
           Positioned(
-            bottom: 112, // 84 (nav) + 28 (bottom-28)
-            right: 20, // right-5 (5 * 4 = 20)
+            bottom: 32,
+            right: 20,
             child: ActionSidebar(),
-          ),
-
-          // 4. Bottom Navbar
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: CustomBottomNavBar(),
           ),
         ],
       ),

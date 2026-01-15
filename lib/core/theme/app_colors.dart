@@ -4,10 +4,19 @@ class AppColors {
   const AppColors._();
 
   static const Color primary = Color(0xFF5417cf);
-  static const Color backgroundLight = Color(0xFFf6f6f8);
+
+  // Light mode colors (from HTML design)
+  static const Color cream = Color(0xFFFDFCF8); // Background
+  static const Color charcoal = Color(0xFF1A1C1E); // Text
+  static const Color slateMuted = Color(0xFF64748b); // Secondary text
+  static const Color goldMuted = Color(0xFFA68E5D); // Author text
+  static const Color lavenderSoft = Color(0xFFE9E5F3); // Badge background
+
+  // Legacy light colors (mapped to new design)
+  static const Color backgroundLight = cream;
   static const Color surfaceLight = Color(0xFFffffff);
-  static const Color textLight = Color(0xFF1a202c);
-  static const Color textSecondaryLight = Color(0xFF64748b); // slate-500
+  static const Color textLight = charcoal;
+  static const Color textSecondaryLight = slateMuted;
 
   // Dark mode colors as per design
   static const Color backgroundDark = Color(0xFF161121);
@@ -38,4 +47,14 @@ class AppColors {
 
   static Color textSecondary(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark ? textSecondaryDark : textSecondaryLight;
+
+  // New helper for author text (gold in light, secondary in dark)
+  static Color authorText(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? textSecondaryDark : goldMuted;
+
+  // Helper for badge background
+  static Color badgeBackground(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+          ? primary.withOpacity(0.1)
+          : lavenderSoft.withOpacity(0.6);
 }

@@ -14,54 +14,63 @@ class QuoteDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = AppColors.text(context);
+    final authorColor = AppColors.authorText(context);
+
+    // Author line color: gold-muted in light, primary in dark
+    final lineColor =
+        isDark ? AppColors.primary.withOpacity(0.5) : AppColors.goldMuted.withOpacity(0.4);
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      padding: const EdgeInsets.symmetric(horizontal: 40.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // Decorative Quote Mark
+          // Decorative Quote Mark (larger, 0.1 opacity per HTML)
           Opacity(
-            opacity: 0.2,
+            opacity: 0.1,
             child: Text(
-              '“',
+              '"',
               style: AppTextStyles.serif.copyWith(
-                fontSize: 60,
-                color: AppColors.textDark,
-                height: 1,
+                fontSize: 96, // text-8xl = 96px
+                color: textColor,
+                height: 0.8,
               ),
             ),
           ),
-          const SizedBox(height: 16),
 
-          // Main Quote Text
+          // Main Quote Text (38px serif font matching HTML)
           Text(
             quote,
-            style: AppTextStyles.headline1.copyWith(
-              color: AppColors.textDark,
-              shadows: [
-                Shadow(
-                  color: Colors.black.withOpacity(0.1),
-                  offset: const Offset(0, 2),
-                  blurRadius: 4,
-                ),
-              ],
+            style: AppTextStyles.serif.copyWith(
+              fontSize: 38,
+              fontWeight: FontWeight.w500,
+              color: textColor.withOpacity(0.9),
+              height: 1.25,
+              letterSpacing: -0.5,
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 40),
 
-          // Author Section
+          // Author Section (gold in light mode)
           Row(
             children: [
               Container(
-                width: 32,
+                width: 24,
                 height: 1,
-                color: AppColors.primary.withOpacity(0.5),
+                color: lineColor,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               Text(
                 author,
-                style: AppTextStyles.authorName.copyWith(
-                  color: Colors.grey[400],
+                style: TextStyle(
+                  fontFamily: 'Inter',
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  color: authorColor,
+                  letterSpacing: 2.0,
                 ),
               ),
             ],

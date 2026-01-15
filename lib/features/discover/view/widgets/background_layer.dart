@@ -8,16 +8,17 @@ class BackgroundLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Stack(
       children: [
-        // Base Background
+        // Base Background (cream for light, dark for dark)
         Container(
           color: AppColors.background(context),
         ),
 
-        // Gradient & Glow
-        if (Theme.of(context).brightness == Brightness.dark) ...[
-          // Only show premium gradient in dark mode or a lighter one in light
+        // Gradient & Glow (dark mode only)
+        if (isDark) ...[
           Positioned(
             top: 0,
             left: 0,
@@ -29,7 +30,6 @@ class BackgroundLayer extends StatelessWidget {
               ),
             ),
           ),
-
           Positioned(
             bottom: -80,
             right: -80,
@@ -48,19 +48,17 @@ class BackgroundLayer extends StatelessWidget {
           ),
         ],
 
-        // Noise Texture (Opacity adjusted for light mode)
+        // Noise Texture (from HTML design - 0.4 opacity for light mode)
         Positioned.fill(
-          child: Opacity(
-            opacity: Theme.of(context).brightness == Brightness.dark ? 0.03 : 0.015,
-            child: Image.network(
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuCjwbG_XzNhyvOk0iverYxK_JQY2kscej8AftT1zEkmbta4BrYWankkOQuKMGMyK38zVGiPk1bSGVM6ObPj61jWzzU2DUjkfBl9Me_3wrArw4gj1FYFTBpTHY_KAAQXG3DIDMzjVuwn3V2cKAoLLzpGIjFYZ93j7i_uXxQ3jAUEfgSn-m16TZPhP8iGDm1JOXp94alZcWH1sOzj14cGw4nMV1jut0zuMEOt42XwIxw7L90gfv1paZ9Fnkjzb8L2ABtrBzk8jxaIgb8',
-              fit: BoxFit.none,
-              repeat: ImageRepeat.repeat,
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? null
-                  : Colors.black, // Darken noise if needed, or keep white/transparent
-              colorBlendMode:
-                  Theme.of(context).brightness == Brightness.dark ? null : BlendMode.srcATop,
+          child: IgnorePointer(
+            child: Opacity(
+              opacity: isDark ? 0.03 : 0.4,
+              child: Image.network(
+                'https://lh3.googleusercontent.com/aida-public/AB6AXuCjY5fBO1w18tkHxw5s1BwXR-S7CKnRtxI-WeXwcdt4JGqdtVu4Cni88Hpyjy8GQ-sE5dcAU2Ua4G-66QAwUdAWLaOnrubV5nAOlFJPjRscq20YC3_sEduDpiZE2tYVC5eHo-ZIabvMlm0ECWkrNxCkpaMgLBUhP_p1li5OlSOQ06I36AXP0ylBxpVfXTDLNGrMpBbeUbND7JE3WhS9DqZ2fafUv-5BJg28SzYpke3oC81YzeA3sNVpiNYPmgqRpCGNZAZrRWwxSIo',
+                fit: BoxFit.none,
+                repeat: ImageRepeat.repeat,
+                errorBuilder: (context, error, stackTrace) => const SizedBox.shrink(),
+              ),
             ),
           ),
         ),

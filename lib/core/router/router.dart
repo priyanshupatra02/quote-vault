@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:quote_vault/core/router/auth_guard.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 
 /// This class used for defined routes and paths na dother properties
@@ -6,6 +7,11 @@ import 'package:quote_vault/core/router/router.gr.dart';
 class AppRouter extends RootStackRouter {
   @override
   late final List<AutoRoute> routes = [
+    AutoRoute(
+      page: NavbarRoute.page,
+      path: '/',
+      initial: true,
+    ),
     AutoRoute(
       page: ExploreRoute.page,
       path: '/explore',
@@ -24,8 +30,8 @@ class AppRouter extends RootStackRouter {
     ),
     AutoRoute(
       page: LoginRoute.page,
+      guards: [AuthGuard()],
       path: '/login',
-      initial: true,
     ),
     AutoRoute(
       page: ForgotPasswordRoute.page,
