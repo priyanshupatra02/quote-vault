@@ -5,10 +5,15 @@ class AppColors {
 
   static const Color primary = Color(0xFF5417cf);
   static const Color backgroundLight = Color(0xFFf6f6f8);
+  static const Color surfaceLight = Color(0xFFffffff);
+  static const Color textLight = Color(0xFF1a202c);
+  static const Color textSecondaryLight = Color(0xFF64748b); // slate-500
 
   // Dark mode colors as per design
   static const Color backgroundDark = Color(0xFF161121);
   static const Color surfaceDark = Color(0xFF1f1a2e);
+  static const Color textDark = Colors.white;
+  static const Color textSecondaryDark = Color(0xFFA69DB8);
 
   // Gradients
   static const RadialGradient premiumGradient = RadialGradient(
@@ -21,6 +26,16 @@ class AppColors {
     stops: [0.0, 0.7],
   );
 
-  static const Color textDark = Colors.white;
-  static const Color textLight = Color(0xFF1a202c); // slate-900 like
+  // Helper to get correct color based on brightness
+  static Color background(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? backgroundDark : backgroundLight;
+
+  static Color surface(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? surfaceDark : surfaceLight;
+
+  static Color text(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? textDark : textLight;
+
+  static Color textSecondary(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark ? textSecondaryDark : textSecondaryLight;
 }

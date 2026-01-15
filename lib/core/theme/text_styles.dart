@@ -40,4 +40,15 @@ class AppTextStyles {
         fontWeight: FontWeight.w600,
         letterSpacing: 0.5,
       );
+
+  static TextStyle get label => display.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w600,
+        letterSpacing: 0.5,
+      );
+
+  static TextStyle get body => display.copyWith(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+      );
 }

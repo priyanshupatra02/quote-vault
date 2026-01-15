@@ -1,6 +1,8 @@
 import 'dart:ui' as ui;
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 
@@ -9,41 +11,94 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Determine active index based on current route
+    final currentRoute = context.router.current.name;
+    final int activeIndex;
+
+    // Logic for 4-tab structure
+    if (currentRoute == DiscoverRoute.name) {
+      activeIndex = 0;
+    } else if (currentRoute == ExploreRoute.name) {
+      activeIndex = 1;
+    } else if (currentRoute == SavedRoute.name) {
+      activeIndex = 2;
+    } else if (currentRoute == SettingsRoute.name) {
+      activeIndex = 3;
+    } else {
+      activeIndex = 0; // Default
+    }
+
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor =
+        isDark ? AppColors.backgroundDark.withOpacity(0.9) : Colors.white.withOpacity(0.9);
+    final borderColor = isDark ? Colors.white12 : Colors.black.withOpacity(0.05);
+
     return Container(
-      height: 84, // css: h-[84px]
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.backgroundDark.withOpacity(0.8),
-        border: const Border(
+        color: bgColor,
+        border: Border(
           top: BorderSide(
-            color: Colors.white12, // white/5 like css
+            color: borderColor,
             width: 1,
           ),
         ),
       ),
       child: ClipRect(
         child: BackdropFilter(
-          filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16), // backdrop-blur-xl
+          filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
           child: Padding(
-            padding: const EdgeInsets.only(top: 12.0),
+            padding: const EdgeInsets.only(top: 12.0, bottom: 24.0), // tailored padding
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildNavItem(
-                  icon: Icons.style,
-                  label: 'Discover',
-                  isActive: true,
+                  context: context,
+                  icon: Icons.home,
+                  label: 'Home',
+                  isActive: activeIndex == 0,
+                  onTap: () {
+                    // Home -> DiscoverRoute
+                    if (currentRoute != DiscoverRoute.name) {
+                      context.router.replace(const DiscoverRoute());
+                    }
+                  },
                 ),
                 _buildNavItem(
-                  icon: Icons.search,
-                  label: 'Search',
-                  isActive: false,
+                  context: context,
+                  icon: Icons.explore,
+                  label: 'Explore',
+                  isActive: activeIndex == 1,
+                  onTap: () {
+                    // Explore -> ExploreRoute
+                    if (currentRoute != ExploreRoute.name) {
+                      context.router.replace(const ExploreRoute());
+                    }
+                  },
                 ),
                 _buildNavItem(
-                  icon: Icons.person,
-                  label: 'Profile',
-                  isActive: false,
+                  context: context,
+                  icon: Icons.bookmarks,
+                  label:
+                      'Vault', // "Saved" or "Vault" per text. Design text says "Vault" in one place, "Saved" in another. "Vault" is distinct.
+                  isActive: activeIndex == 2,
+                  onTap: () {
+                    if (currentRoute != SavedRoute.name) {
+                      context.router.replace(const SavedRoute());
+                    }
+                  },
+                ),
+                _buildNavItem(
+                  context: context,
+                  icon: Icons.settings,
+                  label: 'Settings',
+                  isActive: activeIndex == 3,
+                  onTap: () {
+                    if (currentRoute != SettingsRoute.name) {
+                      context.router.replace(const SettingsRoute());
+                    }
+                  },
                 ),
               ],
             ),
@@ -54,35 +109,44 @@ class CustomBottomNavBar extends StatelessWidget {
   }
 
   Widget _buildNavItem({
+    required BuildContext context,
     required IconData icon,
     required String label,
     required bool isActive,
+    required VoidCallback onTap,
   }) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          decoration: isActive
-              ? BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(999),
-                )
-              : null,
-          child: Icon(
-            icon,
-            color: isActive ? AppColors.primary : Colors.white60,
-            size: 26,
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final inactiveColor = isDark ? Colors.white60 : Colors.black45;
+
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: isActive
+                ? BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(999),
+                  )
+                : null,
+            child: Icon(
+              icon,
+              color: isActive ? AppColors.primary : inactiveColor,
+              size: 26,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: AppTextStyles.bottomNavText.copyWith(
-            color: isActive ? AppColors.primary : Colors.white60,
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: AppTextStyles.bottomNavText.copyWith(
+              color: isActive ? AppColors.primary : inactiveColor,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -7,9 +7,37 @@ class AppRouter extends RootStackRouter {
   @override
   late final List<AutoRoute> routes = [
     AutoRoute(
+      page: ExploreRoute.page,
+      path: '/explore',
+    ),
+    AutoRoute(
+      page: SavedRoute.page,
+      path: '/saved',
+    ),
+    AutoRoute(
       page: DiscoverRoute.page,
-      path: '/',
+      path: '/home',
+    ),
+    AutoRoute(
+      page: EditorRoute.page,
+      path: '/editor',
+    ),
+    AutoRoute(
+      page: ForgotPasswordRoute.page,
+      path: '/forgot-password',
+    ),
+    AutoRoute(
+      page: SettingsRoute.page,
+      path: '/settings',
+    ),
+    AutoRoute(
+      page: ResetPasswordSuccessRoute.page,
+      path: '/reset-password-success',
       initial: true,
+    ),
+    AutoRoute(
+      page: SignUpRoute.page,
+      path: '/signup',
     ),
   ];
 }
