@@ -164,24 +164,24 @@ class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin
                   child: ScaleTransition(
                     scale: _scaleAnimation,
                     child: Container(
-                      width: 120, // 30 * 4
-                      height: 120,
+                      width: 200, // Increased size
+                      height: 200,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(40),
                         boxShadow: [
                           BoxShadow(
                             color: AppColors.primary.withOpacity(0.3),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
+                            blurRadius: 30,
+                            offset: const Offset(0, 15),
                           ),
                         ],
                       ),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(40),
                         child: Image.asset(
                           'assets/images/app_logo.png',
-                          width: 120,
-                          height: 120,
+                          width: 200,
+                          height: 200,
                           fit: BoxFit.cover,
                         ),
                       ),
