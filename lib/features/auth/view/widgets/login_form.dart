@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
-import 'package:quote_vault/features/auth/controller/auth_controller.dart';
+import 'package:quote_vault/features/auth/controller/pod/auth_pod.dart';
+import 'package:quote_vault/features/auth/controller/state/auth_states.dart';
 import 'package:quote_vault/features/auth/view/widgets/auth_input_fields.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
@@ -37,30 +38,33 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       return;
     }
 
-    await ref.read(authControllerProvider.notifier).signIn(
+    await ref.read(authStateProvider.notifier).signIn(
           email: email,
           password: password,
         );
-
-    // Check state after async
-    if (!mounted) return;
-
-    final state = ref.read(authControllerProvider);
-    state.whenOrNull(error: (error, stack) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login Failed: ${error.toString()}')),
-      );
-    }, data: (user) {
-      if (user != null) {
-        context.router.replace(const DiscoverRoute());
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authControllerProvider);
-    final isLoading = authState.isLoading;
+    final authState = ref.watch(authStateProvider);
+
+    // Listen for state changes and react accordingly
+    ref.listen<AsyncValue<AuthState>>(authStateProvider, (previous, next) {
+      next.whenData((state) {
+        if (state is AuthenticatedState) {
+          context.router.replace(const NavbarRoute());
+        } else if (state is AuthErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Login Failed: ${state.message}')),
+          );
+        }
+      });
+    });
+
+    final isLoading = authState.whenOrNull(
+          data: (state) => state is AuthLoadingState,
+        ) ??
+        authState.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -53,4 +53,17 @@ class AuthController extends StateNotifier<AsyncValue<User?>> {
       state = AsyncValue.error(e, st);
     }
   }
+
+  Future<void> updateAvatar(String url) async {
+    try {
+      final response = await _authService.updateUser(
+        UserAttributes(
+          data: {'avatar_url': url},
+        ),
+      );
+      state = AsyncValue.data(response.user);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
 }

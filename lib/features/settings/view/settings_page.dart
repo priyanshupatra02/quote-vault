@@ -1,11 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/settings/view/widgets/appearance_section.dart';
+import 'package:quote_vault/features/settings/view/widgets/cloud_sync_section.dart';
 import 'package:quote_vault/features/settings/view/widgets/notification_section.dart';
-import 'package:quote_vault/features/settings/view/widgets/settings_footer.dart';
+import 'package:quote_vault/features/settings/view/widgets/profile_section.dart';
+import 'package:quote_vault/features/settings/view/widgets/stats_grid.dart';
 import 'package:quote_vault/features/settings/view/widgets/typography_section.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 @RoutePage()
 class SettingsPage extends StatelessWidget {
@@ -35,7 +39,7 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Settings',
+          'Profile',
           style: AppTextStyles.display.copyWith(
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -48,7 +52,7 @@ class SettingsPage extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
               child: Text(
-                'Done',
+                'Edit',
                 style: AppTextStyles.display.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -66,14 +70,74 @@ class SettingsPage extends StatelessWidget {
             constraints: const BoxConstraints(maxWidth: 480), // Mobile-centric width
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-              children: const [
-                AppearanceSection(),
-                SizedBox(height: 32),
-                TypographySection(),
-                SizedBox(height: 32),
-                NotificationSection(),
-                SizedBox(height: 48),
-                SettingsFooter(),
+              children: [
+                // Profile Section
+                const ProfileSection(),
+                const SizedBox(height: 32),
+
+                // Stats Grid
+                const StatsGrid(),
+                const SizedBox(height: 24),
+
+                // Cloud Sync
+                const CloudSyncSection(),
+                const SizedBox(height: 32),
+
+                // Preferences Title
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                  child: Text(
+                    'HEADS UP',
+                    style: AppTextStyles.label.copyWith(
+                      color: AppColors.textSecondary(context),
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // Existing Sections
+                const AppearanceSection(),
+                const SizedBox(height: 32),
+                const TypographySection(),
+                const SizedBox(height: 32),
+                const NotificationSection(),
+                const SizedBox(height: 48),
+
+                // Log Out & Footer
+                Column(
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        final supabase = Supabase.instance.client;
+                        await supabase.auth.signOut();
+                        if (context.mounted) {
+                          context.router.replaceAll([const LoginRoute()]);
+                        }
+                      },
+                      child: Text(
+                        'Log Out',
+                        style: AppTextStyles.display.copyWith(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFFFF3B30), // iOS Red
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'QuoteVault v2.4.0 (Build 120)',
+                      style: AppTextStyles.label.copyWith(
+                        color: AppColors.textSecondary(context),
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
               ],
             ),
           ),

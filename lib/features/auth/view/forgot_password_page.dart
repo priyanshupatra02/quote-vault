@@ -1,22 +1,64 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/auth/controller/pod/auth_pod.dart';
+import 'package:quote_vault/features/auth/controller/state/auth_states.dart';
 
 @RoutePage()
-class ForgotPasswordPage extends StatefulWidget {
+class ForgotPasswordPage extends ConsumerStatefulWidget {
   const ForgotPasswordPage({super.key});
 
   @override
-  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
+  ConsumerState<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
+class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
   final _emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleResetPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter your email address')),
+      );
+      return;
+    }
+
+    await ref.read(authStateProvider.notifier).resetPassword(email: email);
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final authState = ref.watch(authStateProvider);
+
+    // Listen for state changes
+    ref.listen<AsyncValue<AuthState>>(authStateProvider, (previous, next) {
+      next.whenData((state) {
+        if (state is PasswordResetSentState) {
+          context.router.replace(const ResetPasswordSuccessRoute());
+        } else if (state is AuthErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${state.message}')),
+          );
+        }
+      });
+    });
+
+    final isLoading = authState.whenOrNull(
+          data: (state) => state is AuthLoadingState,
+        ) ??
+        authState.isLoading;
 
     return Scaffold(
       backgroundColor: AppColors.background(context),
@@ -177,9 +219,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             width: double.infinity,
                             height: 48,
                             child: ElevatedButton(
-                              onPressed: () {
-                                // Logic to send reset link
-                              },
+                              onPressed: isLoading ? null : _handleResetPassword,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
@@ -189,14 +229,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 ),
                                 padding: EdgeInsets.zero,
                               ),
-                              child: Text(
-                                'Send Reset Link',
-                                style: AppTextStyles.buttonText.copyWith(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 0.2, // slightly less than default button
-                                ),
-                              ),
+                              child: isLoading
+                                  ? const SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white, strokeWidth: 2),
+                                    )
+                                  : Text(
+                                      'Send Reset Link',
+                                      style: AppTextStyles.buttonText.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: 0.2,
+                                      ),
+                                    ),
                             ),
                           ),
                         ],
@@ -222,7 +269,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigate to login/signup
+                      context.router.replace(const LoginRoute());
                     },
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(horizontal: 4),

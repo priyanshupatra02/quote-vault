@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/services/notification_service.dart';
 import 'package:quote_vault/splasher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -11,6 +12,9 @@ Future<void> main() async {
     url: 'https://kmgmuyjttouitziswvyc.supabase.co',
     anonKey: 'sb_publishable_9wwh9-mlYaKOrg-frPELWw_9o3Ic1lj',
   );
+
+  // Initialize notification service
+  await NotificationService().initialize();
 
   runApp(
     const ProviderScope(child: Splasher()),

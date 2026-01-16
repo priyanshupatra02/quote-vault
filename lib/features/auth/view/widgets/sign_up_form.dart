@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
-import 'package:quote_vault/features/auth/controller/auth_controller.dart';
+import 'package:quote_vault/features/auth/controller/pod/auth_pod.dart';
+import 'package:quote_vault/features/auth/controller/state/auth_states.dart';
 import 'package:quote_vault/features/auth/view/widgets/auth_input_fields.dart';
 
 class SignUpForm extends ConsumerStatefulWidget {
@@ -29,6 +30,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
   }
 
   Future<void> _handleSignUp() async {
+    final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
@@ -39,33 +41,37 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
       return;
     }
 
-    await ref.read(authControllerProvider.notifier).signUp(
+    await ref.read(authStateProvider.notifier).signUp(
           email: email,
           password: password,
+          name: name.isNotEmpty ? name : null,
         );
-
-    // Check state after async
-    if (!mounted) return;
-
-    final state = ref.read(authControllerProvider);
-    state.whenOrNull(error: (error, stack) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign Up Failed: ${error.toString()}')),
-      );
-    }, data: (user) {
-      if (user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sign Up Successful!')),
-        );
-        context.router.replace(const DiscoverRoute());
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authControllerProvider);
-    final isLoading = authState.isLoading;
+    final authState = ref.watch(authStateProvider);
+
+    // Listen for state changes and react accordingly
+    ref.listen<AsyncValue<AuthState>>(authStateProvider, (previous, next) {
+      next.whenData((state) {
+        if (state is RegistrationSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+          context.router.replace(const NavbarRoute());
+        } else if (state is AuthErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign Up Failed: ${state.message}')),
+          );
+        }
+      });
+    });
+
+    final isLoading = authState.whenOrNull(
+          data: (state) => state is AuthLoadingState,
+        ) ??
+        authState.isLoading;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -102,7 +108,9 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              context.router.push(const ForgotPasswordRoute());
+            },
             style: TextButton.styleFrom(
               padding: EdgeInsets.zero,
               minimumSize: const Size(0, 0),

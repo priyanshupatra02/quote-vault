@@ -119,13 +119,13 @@ class SearchPage extends StatelessWidget {
             child: SearchHeader(),
           ),
 
-          // Bottom Nav
-          const Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: CustomBottomNavBar(),
-          ),
+          // // Bottom Nav
+          // const Positioned(
+          //   bottom: 0,
+          //   left: 0,
+          //   right: 0,
+          //   child: CustomBottomNavBar(),
+          // ),
         ],
       ),
     );

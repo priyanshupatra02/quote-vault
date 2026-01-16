@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/core/theme/theme_color_controller.dart';
 import 'package:quote_vault/core/theme/theme_controller.dart';
 
 class AppearanceSection extends ConsumerWidget {
@@ -10,6 +11,7 @@ class AppearanceSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final currentColor = ref.watch(themeColorControllerProvider);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,9 +74,6 @@ class AppearanceSection extends ConsumerWidget {
                       ),
                     ),
                     const Spacer(),
-                    // Using our ThemeSegmentedBtn logic but adapting UI to look like a switch
-                    // or just using a Switch that toggles light/dark.
-                    // HTML uses a switch.
                     Switch(
                       value: isDark,
                       onChanged: (val) {
@@ -107,11 +106,45 @@ class AppearanceSection extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        const _ColorOption(color: Color(0xFFFFD700), isSelected: false), // Gold
+                        _ColorOption(
+                          color: const Color(0xFF5417cf), // Brand Purple
+                          isSelected: currentColor.value == const Color(0xFF5417cf).value,
+                          onTap: () => ref
+                              .read(themeColorControllerProvider.notifier)
+                              .changeColor(const Color(0xFF5417cf)),
+                        ),
                         const SizedBox(width: 16),
-                        const _ColorOption(color: Color(0xFF000080), isSelected: true), // Navy (Selected mockup)
+                        _ColorOption(
+                          color: const Color(0xFFFFD700), // Gold
+                          isSelected: currentColor.value == const Color(0xFFFFD700).value,
+                          onTap: () => ref
+                              .read(themeColorControllerProvider.notifier)
+                              .changeColor(const Color(0xFFFFD700)),
+                        ),
                         const SizedBox(width: 16),
-                        const _ColorOption(color: Color(0xFF50C878), isSelected: false), // Emerald
+                        _ColorOption(
+                          color: const Color(0xFF000080), // Navy
+                          isSelected: currentColor.value == const Color(0xFF000080).value,
+                          onTap: () => ref
+                              .read(themeColorControllerProvider.notifier)
+                              .changeColor(const Color(0xFF000080)),
+                        ),
+                        const SizedBox(width: 16),
+                        _ColorOption(
+                          color: const Color(0xFF50C878), // Emerald
+                          isSelected: currentColor.value == const Color(0xFF50C878).value,
+                          onTap: () => ref
+                              .read(themeColorControllerProvider.notifier)
+                              .changeColor(const Color(0xFF50C878)),
+                        ),
+                        const SizedBox(width: 16),
+                        _ColorOption(
+                          color: const Color(0xFFFF3B30), // Red
+                          isSelected: currentColor.value == const Color(0xFFFF3B30).value,
+                          onTap: () => ref
+                              .read(themeColorControllerProvider.notifier)
+                              .changeColor(const Color(0xFFFF3B30)),
+                        ),
                       ],
                     ),
                   ],
@@ -128,37 +161,42 @@ class AppearanceSection extends ConsumerWidget {
 class _ColorOption extends StatelessWidget {
   final Color color;
   final bool isSelected;
+  final VoidCallback onTap;
 
   const _ColorOption({
     required this.color,
     required this.isSelected,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        // Selection ring
-        if (isSelected)
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: color, width: 2),
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Selection ring
+          if (isSelected)
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: color, width: 2),
+              ),
             ),
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: color,
+              shape: BoxShape.circle,
+            ),
+            child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
           ),
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
-          child: isSelected ? const Icon(Icons.check, color: Colors.white, size: 20) : null,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

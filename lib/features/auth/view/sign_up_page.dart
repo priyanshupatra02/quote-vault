@@ -2,6 +2,7 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/auth/view/widgets/sign_up_form.dart';
@@ -106,7 +107,9 @@ class _LoginLink extends StatelessWidget {
           ),
         ),
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            context.router.replace(const LoginRoute());
+          },
           child: Text(
             'Log In',
             style: AppTextStyles.display.copyWith(

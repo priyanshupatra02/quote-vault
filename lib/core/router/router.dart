@@ -11,26 +11,30 @@ class AppRouter extends RootStackRouter {
       page: NavbarRoute.page,
       path: '/',
       initial: true,
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: ExploreRoute.page,
       path: '/explore',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: SavedRoute.page,
       path: '/saved',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: DiscoverRoute.page,
       path: '/home',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: EditorRoute.page,
       path: '/editor',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: LoginRoute.page,
-      guards: [AuthGuard()],
       path: '/login',
     ),
     AutoRoute(
@@ -40,10 +44,12 @@ class AppRouter extends RootStackRouter {
     AutoRoute(
       page: SettingsRoute.page,
       path: '/settings',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: ResetPasswordSuccessRoute.page,
       path: '/reset-password-success',
+      guards: [AuthGuard()],
     ),
     AutoRoute(
       page: SignUpRoute.page,

@@ -8,12 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/router/auto_route_observer.dart';
 import 'package:quote_vault/core/router/router_pod.dart';
 import 'package:quote_vault/core/theme/app_theme.dart';
+import 'package:quote_vault/core/theme/theme_color_controller.dart';
 import 'package:quote_vault/core/theme/theme_controller.dart';
 import 'package:quote_vault/i18n/strings.g.dart';
 import 'package:quote_vault/shared/helper/global_helper.dart';
+import 'package:quote_vault/shared/pods/translation_pod.dart';
 import 'package:quote_vault/shared/widget/no_internet_widget.dart';
 import 'package:quote_vault/shared/widget/responsive_wrapper.dart';
-import 'package:quote_vault/shared/pods/translation_pod.dart';
 
 ///This class holds Material App or Cupertino App
 ///with routing,theming and locale setup .
@@ -31,12 +32,14 @@ class _AppState extends ConsumerState<App> with GlobalHelper {
   Widget build(BuildContext context) {
     final approuter = ref.watch(autorouterProvider);
     final currentTheme = ref.watch(themecontrollerProvider);
+    final accentColor = ref.watch(themeColorControllerProvider);
+
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       //TODO: change app name
       title: 'example App',
-      theme: Themes.theme,
-      darkTheme: Themes.darkTheme,
+      theme: Themes.getTheme(accentColor),
+      darkTheme: Themes.getDarkTheme(accentColor),
       themeMode: currentTheme,
       routerConfig: approuter.config(
         placeholder: (context) => const SizedBox.shrink(),
@@ -63,8 +66,7 @@ class _AppState extends ConsumerState<App> with GlobalHelper {
           final mediaquery = MediaQuery.of(context);
           child = MediaQuery(
             data: mediaquery.copyWith(
-              textScaler:
-                  TextScaler.linear(mediaquery.textScaleFactor.clamp(0, 1)),
+              textScaler: TextScaler.linear(mediaquery.textScaleFactor.clamp(0, 1)),
             ),
             child: child,
           );

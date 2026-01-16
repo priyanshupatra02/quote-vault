@@ -6,12 +6,12 @@ import 'package:quote_vault/core/theme/app_colors.dart';
 ///This class defines light theme and dark theme
 ///Here we used flex color scheme
 class Themes {
-  static ThemeData get theme => FlexThemeData.light(
-        colors: const FlexSchemeColor(
-          primary: AppColors.primary,
-          primaryContainer: Color(0xFFE0D4FC),
-          secondary: AppColors.primary,
-          secondaryContainer: Color(0xFFE0D4FC),
+  static ThemeData getTheme(Color primaryColor) => FlexThemeData.light(
+        colors: FlexSchemeColor(
+          primary: primaryColor,
+          primaryContainer: Color.alphaBlend(primaryColor.withOpacity(0.2), Colors.white),
+          secondary: primaryColor,
+          secondaryContainer: Color.alphaBlend(primaryColor.withOpacity(0.2), Colors.white),
         ),
         scaffoldBackground: AppColors.backgroundLight,
         background: AppColors.backgroundLight,
@@ -36,12 +36,12 @@ class Themes {
         useMaterial3: true,
       );
 
-  static ThemeData get darkTheme => FlexThemeData.dark(
-        colors: const FlexSchemeColor(
-          primary: AppColors.primary,
-          primaryContainer: Color(0xFF381E72), // Darker shade for container
-          secondary: AppColors.primary,
-          secondaryContainer: Color(0xFF381E72),
+  static ThemeData getDarkTheme(Color primaryColor) => FlexThemeData.dark(
+        colors: FlexSchemeColor(
+          primary: primaryColor,
+          primaryContainer: Color.alphaBlend(primaryColor.withOpacity(0.4), Colors.black),
+          secondary: primaryColor,
+          secondaryContainer: Color.alphaBlend(primaryColor.withOpacity(0.4), Colors.black),
         ),
         scaffoldBackground: AppColors.backgroundDark,
         background: AppColors.backgroundDark,
