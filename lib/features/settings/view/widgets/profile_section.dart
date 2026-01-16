@@ -4,6 +4,7 @@ import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/auth/controller/auth_controller.dart';
 import 'package:quote_vault/features/settings/view/widgets/avatar_selection_sheet.dart';
+import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 
 class ProfileSection extends ConsumerWidget {
   const ProfileSection({super.key});
@@ -13,7 +14,7 @@ class ProfileSection extends ConsumerWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final userAsync = ref.watch(authControllerProvider);
 
-    return userAsync.when(
+    return userAsync.easyWhen(
       data: (user) {
         final email = user?.email ?? 'User';
         // Try to get name from metadata (full_name for OAuth, name for manual signup), fallback to email prefix
@@ -136,8 +137,6 @@ class ProfileSection extends ConsumerWidget {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

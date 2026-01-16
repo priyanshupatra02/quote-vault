@@ -8,6 +8,7 @@ import 'package:quote_vault/features/discover/view/widgets/daily_insight_badge.d
 import 'package:quote_vault/features/discover/view/widgets/quote_display.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart';
 import 'package:quote_vault/features/quotes/controller/state/quotes_states.dart';
+import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 
 @RoutePage()
 class DiscoverPage extends ConsumerStatefulWidget {
@@ -69,29 +70,10 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
 
                 // Quote Area
                 Expanded(
-                  child: quotesState.when(
+                  child: quotesState.easyWhen(
                     data: (state) => _buildQuotesContent(state, currentIndex),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    error: (error, _) => Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Error loading quotes',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: () => ref.read(quotesProvider.notifier).refresh(),
-                            child: const Text('Retry'),
-                          ),
-                        ],
-                      ),
-                    ),
+                    onRetry: () => ref.read(quotesProvider.notifier).refresh(),
+                    includedefaultDioErrorMessage: true,
                   ),
                 ),
 

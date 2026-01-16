@@ -8,6 +8,7 @@ import 'package:quote_vault/features/categories/controller/pod/categories_pod.da
 import 'package:quote_vault/features/categories/controller/state/categories_states.dart';
 import 'package:quote_vault/features/discover/view/widgets/background_layer.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart';
+import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 
 @RoutePage()
 class ExplorePage extends ConsumerWidget {
@@ -143,7 +144,7 @@ class ExplorePage extends ConsumerWidget {
     AsyncValue<CategoriesState> categoriesState,
     int? selectedCategory,
   ) {
-    return categoriesState.when(
+    return categoriesState.easyWhen(
       data: (state) {
         if (state is CategoriesLoadingState) {
           return const SliverToBoxAdapter(
@@ -203,7 +204,7 @@ class ExplorePage extends ConsumerWidget {
 
         return const SliverToBoxAdapter(child: SizedBox.shrink());
       },
-      loading: () => const SliverToBoxAdapter(
+      loadingWidget: () => const SliverToBoxAdapter(
         child: Center(
           child: Padding(
             padding: EdgeInsets.all(32),
@@ -211,7 +212,7 @@ class ExplorePage extends ConsumerWidget {
           ),
         ),
       ),
-      error: (e, _) => SliverToBoxAdapter(
+      errorWidget: (e, _) => SliverToBoxAdapter(
         child: Center(
           child: Text('Error: $e', style: const TextStyle(color: Colors.redAccent)),
         ),

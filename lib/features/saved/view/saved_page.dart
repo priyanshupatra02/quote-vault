@@ -11,6 +11,7 @@ import 'package:quote_vault/features/collections/controller/pod/collections_pod.
 import 'package:quote_vault/features/collections/controller/state/collections_states.dart';
 import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart';
 import 'package:quote_vault/features/favorites/controller/state/favorites_states.dart';
+import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -343,7 +344,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
   }
 
   Widget _buildFavoritesList(AsyncValue<FavoritesState> favoritesState, bool isDark) {
-    return favoritesState.when(
+    return favoritesState.easyWhen(
       data: (state) {
         if (state is FavoritesLoadedState && state.favorites.isNotEmpty) {
           final filteredFavorites = state.favorites.where((q) {
@@ -370,17 +371,17 @@ class _SavedPageState extends ConsumerState<SavedPage> {
         }
         return SliverToBoxAdapter(child: _buildEmptyState(isDark));
       },
-      loading: () => const SliverToBoxAdapter(
+      loadingWidget: () => const SliverToBoxAdapter(
         child: Center(child: CircularProgressIndicator()),
       ),
-      error: (e, _) => SliverToBoxAdapter(
+      errorWidget: (e, _) => SliverToBoxAdapter(
         child: Center(child: Text('Error: $e')),
       ),
     );
   }
 
   Widget _buildFoldersList(AsyncValue<CollectionsState> collectionsState, bool isDark) {
-    return collectionsState.when(
+    return collectionsState.easyWhen(
       data: (state) {
         if (state is CollectionsLoadedState && state.collections.isNotEmpty) {
           final filteredCollections = state.collections.where((c) {
@@ -405,10 +406,10 @@ class _SavedPageState extends ConsumerState<SavedPage> {
         }
         return SliverToBoxAdapter(child: _buildEmptyState(isDark));
       },
-      loading: () => const SliverToBoxAdapter(
+      loadingWidget: () => const SliverToBoxAdapter(
         child: Center(child: CircularProgressIndicator()),
       ),
-      error: (e, _) => SliverToBoxAdapter(
+      errorWidget: (e, _) => SliverToBoxAdapter(
         child: Center(child: Text('Error: $e')),
       ),
     );

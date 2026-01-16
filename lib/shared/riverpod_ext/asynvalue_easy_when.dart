@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 /// This one is extension `when` extension on AsyncValue
 /// with some default loading,error widget and
@@ -57,9 +58,7 @@ class DefaultLoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: isLinear
-          ? const LinearProgressIndicator()
-          : const CircularProgressIndicator.adaptive(),
+      child: isLinear ? const LinearProgressIndicator() : const AppLoader(),
     );
   }
 }
@@ -210,17 +209,13 @@ class DefaultDioErrorWidget extends StatelessWidget {
           DioExceptionType.sendTimeout => Text(
               'Unable to connect to the server.Please try again later.',
             ),
-          DioExceptionType.receiveTimeout =>
-            Text('Check you internet connection reliability.'),
-          DioExceptionType.badCertificate =>
-            Text('Please update your OS or add certificate.'),
-          DioExceptionType.badResponse =>
-            Text('Something went wrong.Please try again later.'),
+          DioExceptionType.receiveTimeout => Text('Check you internet connection reliability.'),
+          DioExceptionType.badCertificate => Text('Please update your OS or add certificate.'),
+          DioExceptionType.badResponse => Text('Something went wrong.Please try again later.'),
           DioExceptionType.cancel => Text('Request Cancelled'),
           DioExceptionType.connectionError =>
             Text('Unable to connect to server.Please try again later.'),
-          DioExceptionType.unknown =>
-            Text('Please check your internet connection.'),
+          DioExceptionType.unknown => Text('Please check your internet connection.'),
         },
       ),
     );
