@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/settings/controller/settings_provider.dart';
 
-class QuoteDisplay extends StatelessWidget {
+class QuoteDisplay extends ConsumerWidget {
   final String quote;
   final String author;
 
@@ -13,7 +15,11 @@ class QuoteDisplay extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settingsFontSize = ref.watch(fontSizeProvider);
+    // Base scale 1.0 at 50. Range 0.5x to 1.5x.
+    final scaleFactor = 0.5 + (settingsFontSize / 100);
+
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final textColor = AppColors.text(context);
     final authorColor = AppColors.authorText(context);
@@ -34,7 +40,7 @@ class QuoteDisplay extends StatelessWidget {
             child: Text(
               '"',
               style: AppTextStyles.serif.copyWith(
-                fontSize: 96, // text-8xl = 96px
+                fontSize: 96 * scaleFactor, // text-8xl = 96px
                 color: textColor,
                 height: 0.8,
               ),
@@ -45,7 +51,7 @@ class QuoteDisplay extends StatelessWidget {
           Text(
             quote,
             style: AppTextStyles.serif.copyWith(
-              fontSize: 38,
+              fontSize: 38 * scaleFactor,
               fontWeight: FontWeight.w500,
               color: textColor.withOpacity(0.9),
               height: 1.25,

@@ -7,9 +7,12 @@ class ProfileModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   // Notification preferences
+  // Notification preferences
   final bool notificationEnabled;
   final int notificationHour;
   final int notificationMinute;
+  // Settings
+  final double fontSize;
 
   const ProfileModel({
     required this.id,
@@ -20,6 +23,7 @@ class ProfileModel {
     this.notificationEnabled = false,
     this.notificationHour = 9,
     this.notificationMinute = 0,
+    this.fontSize = 50.0,
   });
 
   ProfileModel copyWith({
@@ -31,6 +35,7 @@ class ProfileModel {
     bool? notificationEnabled,
     int? notificationHour,
     int? notificationMinute,
+    double? fontSize,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -41,6 +46,7 @@ class ProfileModel {
       notificationEnabled: notificationEnabled ?? this.notificationEnabled,
       notificationHour: notificationHour ?? this.notificationHour,
       notificationMinute: notificationMinute ?? this.notificationMinute,
+      fontSize: fontSize ?? this.fontSize,
     );
   }
 
@@ -54,6 +60,7 @@ class ProfileModel {
       'notification_enabled': notificationEnabled,
       'notification_hour': notificationHour,
       'notification_minute': notificationMinute,
+      'font_size': fontSize,
     };
   }
 
@@ -67,6 +74,7 @@ class ProfileModel {
       notificationEnabled: map['notification_enabled'] ?? false,
       notificationHour: map['notification_hour'] ?? 9,
       notificationMinute: map['notification_minute'] ?? 0,
+      fontSize: (map['font_size'] as num?)?.toDouble() ?? 50.0,
     );
   }
 
@@ -90,5 +98,5 @@ class ProfileModel {
   }
 
   @override
-  int get hashCode => id.hashCode ^ name.hashCode ^ avatarUrl.hashCode;
+  int get hashCode => id.hashCode ^ name.hashCode ^ avatarUrl.hashCode ^ fontSize.hashCode;
 }

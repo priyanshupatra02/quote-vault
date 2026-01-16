@@ -120,6 +120,7 @@ class SupabaseHelper {
     required String userId,
     String? name,
     String? avatarUrl,
+    double? fontSize,
   }) async {
     try {
       final updates = <String, dynamic>{
@@ -127,6 +128,7 @@ class SupabaseHelper {
       };
       if (name != null) updates['name'] = name;
       if (avatarUrl != null) updates['avatar_url'] = avatarUrl;
+      if (fontSize != null) updates['font_size'] = fontSize;
 
       final response =
           await client.from('profiles').update(updates).eq('id', userId).select().single();

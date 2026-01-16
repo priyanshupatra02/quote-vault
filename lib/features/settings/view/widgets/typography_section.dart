@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/settings/controller/settings_provider.dart';
 
-class TypographySection extends StatefulWidget {
+class TypographySection extends ConsumerStatefulWidget {
   const TypographySection({super.key});
 
   @override
-  State<TypographySection> createState() => _TypographySectionState();
+  ConsumerState<TypographySection> createState() => _TypographySectionState();
 }
 
-class _TypographySectionState extends State<TypographySection> {
-  double _fontSize = 50;
-
+class _TypographySectionState extends ConsumerState<TypographySection> {
   @override
   Widget build(BuildContext context) {
+    final fontSize = ref.watch(fontSizeProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Column(
@@ -69,7 +70,7 @@ class _TypographySectionState extends State<TypographySection> {
                       '"Simplicity is the ultimate sophistication."',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.display.copyWith(
-                        fontSize: 18 + (_fontSize / 10), // Simple scaling logic
+                        fontSize: 18 + (fontSize / 10), // Simple scaling logic
                         fontWeight: FontWeight.w500,
                         color: AppColors.text(context),
                         height: 1.4,
@@ -79,7 +80,7 @@ class _TypographySectionState extends State<TypographySection> {
                     Text(
                       'LEONARDO DA VINCI',
                       style: AppTextStyles.label.copyWith(
-                        fontSize: 10 + (_fontSize / 20),
+                        fontSize: 10 + (fontSize / 20),
                         color: AppColors.textSecondary(context),
                         fontWeight: FontWeight.bold,
                         letterSpacing: 1.5,
@@ -121,13 +122,11 @@ class _TypographySectionState extends State<TypographySection> {
                         overlayColor: AppColors.primary.withOpacity(0.2),
                       ),
                       child: Slider(
-                        value: _fontSize,
+                        value: fontSize,
                         min: 0,
                         max: 100,
                         onChanged: (val) {
-                          setState(() {
-                            _fontSize = val;
-                          });
+                          ref.read(fontSizeProvider.notifier).setFontSize(val);
                         },
                       ),
                     ),
