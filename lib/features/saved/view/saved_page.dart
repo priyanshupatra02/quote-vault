@@ -11,13 +11,11 @@ import 'package:quote_vault/features/collections/controller/pod/collections_pod.
 import 'package:quote_vault/features/collections/controller/state/collections_states.dart';
 import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart';
 import 'package:quote_vault/features/favorites/controller/state/favorites_states.dart';
+import 'package:quote_vault/features/saved/controller/pod/saved_page_providers.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-/// Filter tabs for the vault
-enum VaultFilter { all, favorites, folders }
 
 @RoutePage()
 class SavedPage extends ConsumerStatefulWidget {
@@ -28,18 +26,14 @@ class SavedPage extends ConsumerStatefulWidget {
 }
 
 class _SavedPageState extends ConsumerState<SavedPage> {
-  VaultFilter _selectedFilter = VaultFilter.all;
-  bool _isSearching = false;
   final TextEditingController _searchController = TextEditingController();
-  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _searchController.addListener(() {
-      setState(() {
-        _searchQuery = _searchController.text.trim().toLowerCase();
-      });
+      ref.read(vaultSearchQueryProvider.notifier).state =
+          _searchController.text.trim().toLowerCase();
     });
   }
 
@@ -54,6 +48,9 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     final favoritesState = ref.watch(favoritesProvider);
     final collectionsState = ref.watch(collectionsProvider);
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final selectedFilter = ref.watch(vaultFilterProvider);
+    final isSearching = ref.watch(vaultSearchModeProvider);
+    final searchQuery = ref.watch(vaultSearchQueryProvider);
 
     // Calculate total saved quotes
     int totalQuotes = 0;
@@ -76,7 +73,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                 isDark ? AppColors.backgroundDark.withOpacity(0.95) : Colors.white.withOpacity(0.9),
             elevation: 0,
             automaticallyImplyLeading: false,
-            title: _isSearching
+            title: isSearching
                 ? TextField(
                     controller: _searchController,
                     autofocus: true,
@@ -86,7 +83,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                     ),
                     decoration: InputDecoration(
                       hintText: 'Search vault...',
-                      hintStyle: TextStyle(
+                      hintStyle: AppTextStyles.searchHint.copyWith(
                         color: isDark ? Colors.white38 : Colors.grey[400],
                       ),
                       border: InputBorder.none,
@@ -94,27 +91,24 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                   )
                 : Text(
                     'My Vault',
-                    style: AppTextStyles.display.copyWith(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: isDark ? Colors.white : const Color(0xFF1F2937),
-                      letterSpacing: -0.3,
+                    style: AppTextStyles.pageTitle.copyWith(
+                      fontSize: 24,
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
                     ),
                   ),
             actions: [
               IconButton(
                 icon: Icon(
-                  _isSearching ? Icons.close : Icons.search,
+                  isSearching ? Icons.close : Icons.search,
                   color: isDark ? Colors.white54 : Colors.grey[500],
                 ),
                 onPressed: () {
-                  setState(() {
-                    _isSearching = !_isSearching;
-                    if (!_isSearching) {
-                      _searchController.clear();
-                      _searchQuery = '';
-                    }
-                  });
+                  final currentSearching = ref.read(vaultSearchModeProvider);
+                  ref.read(vaultSearchModeProvider.notifier).state = !currentSearching;
+                  if (currentSearching) {
+                    _searchController.clear();
+                    ref.read(vaultSearchQueryProvider.notifier).state = '';
+                  }
                 },
               ),
               PopupMenuButton<String>(
@@ -205,9 +199,8 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                         const SizedBox(width: 6),
                         Text(
                           'CLOUD SYNCED',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionLabel.copyWith(
                             fontSize: 10,
-                            fontWeight: FontWeight.w700,
                             letterSpacing: 0.8,
                             color: isDark ? AppColors.primary : const Color(0xFF4338CA),
                           ),
@@ -220,19 +213,18 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                   // Stats
                   Text(
                     totalQuotes.toString(),
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.pageTitle.copyWith(
                       fontSize: 40,
                       fontWeight: FontWeight.w800,
-                      color: isDark ? Colors.white : const Color(0xFF1F2937),
+                      color: isDark ? Colors.white : const Color(0xFF0F172A),
                       letterSpacing: -1,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Saved quotes',
-                    style: TextStyle(
+                    style: AppTextStyles.subDetail.copyWith(
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
                       color: isDark ? Colors.white54 : Colors.grey[500],
                     ),
                   ),
@@ -245,8 +237,8 @@ class _SavedPageState extends ConsumerState<SavedPage> {
           SliverPersistentHeader(
             pinned: true,
             delegate: _FilterTabsDelegate(
-              selectedFilter: _selectedFilter,
-              onFilterChanged: (filter) => setState(() => _selectedFilter = filter),
+              selectedFilter: selectedFilter,
+              onFilterChanged: (filter) => ref.read(vaultFilterProvider.notifier).state = filter,
               isDark: isDark,
             ),
           ),
@@ -254,7 +246,8 @@ class _SavedPageState extends ConsumerState<SavedPage> {
           // Content Grid
           SliverPadding(
             padding: const EdgeInsets.all(16),
-            sliver: _buildContent(favoritesState, collectionsState, isDark),
+            sliver: _buildContent(
+                favoritesState, collectionsState, isDark, selectedFilter, searchQuery),
           ),
 
           // Bottom padding
@@ -276,14 +269,16 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     AsyncValue<FavoritesState> favoritesState,
     AsyncValue<CollectionsState> collectionsState,
     bool isDark,
+    VaultFilter selectedFilter,
+    String searchQuery,
   ) {
-    switch (_selectedFilter) {
+    switch (selectedFilter) {
       case VaultFilter.all:
-        return _buildMasonryGrid(favoritesState, collectionsState, isDark);
+        return _buildMasonryGrid(favoritesState, collectionsState, isDark, searchQuery);
       case VaultFilter.favorites:
-        return _buildFavoritesList(favoritesState, isDark);
-      case VaultFilter.folders:
-        return _buildFoldersList(collectionsState, isDark);
+        return _buildFavoritesList(favoritesState, isDark, searchQuery);
+      case VaultFilter.collections:
+        return _buildCollectionsList(collectionsState, isDark, searchQuery);
     }
   }
 
@@ -291,6 +286,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     AsyncValue<FavoritesState> favoritesState,
     AsyncValue<CollectionsState> collectionsState,
     bool isDark,
+    String searchQuery,
   ) {
     List<Widget> items = [];
 
@@ -299,9 +295,9 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     favoritesState.whenData((state) {
       if (state is FavoritesLoadedState) {
         final filteredFavorites = state.favorites.where((q) {
-          if (_searchQuery.isEmpty) return true;
-          return q.content.toLowerCase().contains(_searchQuery) ||
-              q.author.toLowerCase().contains(_searchQuery);
+          if (searchQuery.isEmpty) return true;
+          return q.content.toLowerCase().contains(searchQuery) ||
+              q.author.toLowerCase().contains(searchQuery);
         });
         for (final quote in filteredFavorites) {
           items.add(_QuoteCard(quote: quote, isDark: isDark, ref: ref));
@@ -314,8 +310,8 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     collectionsState.whenData((state) {
       if (state is CollectionsLoadedState) {
         final filteredCollections = state.collections.where((c) {
-          if (_searchQuery.isEmpty) return true;
-          return c.name.toLowerCase().contains(_searchQuery);
+          if (searchQuery.isEmpty) return true;
+          return c.name.toLowerCase().contains(searchQuery);
         }).toList();
 
         for (int i = 0; i < filteredCollections.length; i++) {
@@ -344,17 +340,18 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     );
   }
 
-  Widget _buildFavoritesList(AsyncValue<FavoritesState> favoritesState, bool isDark) {
+  Widget _buildFavoritesList(
+      AsyncValue<FavoritesState> favoritesState, bool isDark, String searchQuery) {
     return favoritesState.easyWhen(
       data: (state) {
         if (state is FavoritesLoadedState && state.favorites.isNotEmpty) {
           final filteredFavorites = state.favorites.where((q) {
-            if (_searchQuery.isEmpty) return true;
-            return q.content.toLowerCase().contains(_searchQuery) ||
-                q.author.toLowerCase().contains(_searchQuery);
+            if (searchQuery.isEmpty) return true;
+            return q.content.toLowerCase().contains(searchQuery) ||
+                q.author.toLowerCase().contains(searchQuery);
           }).toList();
 
-          if (filteredFavorites.isEmpty && _searchQuery.isNotEmpty) {
+          if (filteredFavorites.isEmpty && searchQuery.isNotEmpty) {
             return SliverToBoxAdapter(child: _buildEmptyState(isDark));
           }
 
@@ -381,16 +378,17 @@ class _SavedPageState extends ConsumerState<SavedPage> {
     );
   }
 
-  Widget _buildFoldersList(AsyncValue<CollectionsState> collectionsState, bool isDark) {
+  Widget _buildCollectionsList(
+      AsyncValue<CollectionsState> collectionsState, bool isDark, String searchQuery) {
     return collectionsState.easyWhen(
       data: (state) {
         if (state is CollectionsLoadedState && state.collections.isNotEmpty) {
           final filteredCollections = state.collections.where((c) {
-            if (_searchQuery.isEmpty) return true;
-            return c.name.toLowerCase().contains(_searchQuery);
+            if (searchQuery.isEmpty) return true;
+            return c.name.toLowerCase().contains(searchQuery);
           }).toList();
 
-          if (filteredCollections.isEmpty && _searchQuery.isNotEmpty) {
+          if (filteredCollections.isEmpty && searchQuery.isNotEmpty) {
             return SliverToBoxAdapter(child: _buildEmptyState(isDark));
           }
 
@@ -437,7 +435,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Save quotes or create folders to see them here',
+            'Save quotes or create collections to see them here',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -536,13 +534,15 @@ class _FilterTabsDelegate extends SliverPersistentHeaderDelegate {
                   child: Center(
                     child: Text(
                       filter.name[0].toUpperCase() + filter.name.substring(1),
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: isSelected
-                            ? (isDark ? Colors.white : const Color(0xFF1F2937))
-                            : (isDark ? Colors.white38 : Colors.grey[500]),
-                      ),
+                      style: isSelected
+                          ? AppTextStyles.navLabelActive.copyWith(
+                              fontSize: 14,
+                              color: isDark ? Colors.white : const Color(0xFF0F172A),
+                            )
+                          : AppTextStyles.navLabelInactive.copyWith(
+                              fontSize: 14,
+                              color: isDark ? Colors.white38 : Colors.grey[500],
+                            ),
                     ),
                   ),
                 ),
@@ -836,7 +836,7 @@ class _QuoteCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'No folders yet',
+                        'No collections yet',
                         style: TextStyle(
                           color: isDark ? Colors.white54 : Colors.grey[500],
                         ),
