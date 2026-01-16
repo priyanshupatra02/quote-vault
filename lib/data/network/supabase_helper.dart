@@ -139,6 +139,56 @@ class SupabaseHelper {
     }
   }
 
+  /// Update notification preferences
+  Future<Result<ProfileModel, APIException>> updateNotificationPreferences({
+    required String userId,
+    required bool enabled,
+    required int hour,
+    required int minute,
+  }) async {
+    try {
+      final updates = <String, dynamic>{
+        'notification_enabled': enabled,
+        'notification_hour': hour,
+        'notification_minute': minute,
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
+      final response =
+          await client.from('profiles').update(updates).eq('id', userId).select().single();
+
+      return Success(ProfileModel.fromMap(response));
+    } on PostgrestException catch (e) {
+      return Error(APIException(errorMessage: e.message));
+    } catch (e) {
+      return Error(APIException(errorMessage: e.toString()));
+    }
+  }
+
+  /// Get random quotes for notification scheduling
+  Future<Result<List<QuoteModel>, APIException>> getRandomQuotes({required int count}) async {
+    try {
+      // Use PostgreSQL random() function to get random quotes
+      final response = await client
+          .from('quotes')
+          .select('*, categories(*)')
+          .limit(count * 3) // Fetch more to ensure variety
+          .order('id', ascending: true);
+
+      final quotes = (response as List).map((e) => QuoteModel.fromMap(e)).toList();
+
+      // Shuffle and take the required count
+      quotes.shuffle();
+      final selectedQuotes = quotes.take(count).toList();
+
+      return Success(selectedQuotes);
+    } on PostgrestException catch (e) {
+      return Error(APIException(errorMessage: e.message));
+    } catch (e) {
+      return Error(APIException(errorMessage: e.toString()));
+    }
+  }
+
   // ============ CATEGORY METHODS ============
 
   /// Get all categories

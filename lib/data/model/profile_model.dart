@@ -6,6 +6,10 @@ class ProfileModel {
   final String? avatarUrl;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  // Notification preferences
+  final bool notificationEnabled;
+  final int notificationHour;
+  final int notificationMinute;
 
   const ProfileModel({
     required this.id,
@@ -13,6 +17,9 @@ class ProfileModel {
     this.avatarUrl,
     this.createdAt,
     this.updatedAt,
+    this.notificationEnabled = false,
+    this.notificationHour = 9,
+    this.notificationMinute = 0,
   });
 
   ProfileModel copyWith({
@@ -21,6 +28,9 @@ class ProfileModel {
     String? avatarUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
+    bool? notificationEnabled,
+    int? notificationHour,
+    int? notificationMinute,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -28,6 +38,9 @@ class ProfileModel {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      notificationEnabled: notificationEnabled ?? this.notificationEnabled,
+      notificationHour: notificationHour ?? this.notificationHour,
+      notificationMinute: notificationMinute ?? this.notificationMinute,
     );
   }
 
@@ -38,6 +51,9 @@ class ProfileModel {
       'avatar_url': avatarUrl,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
+      'notification_enabled': notificationEnabled,
+      'notification_hour': notificationHour,
+      'notification_minute': notificationMinute,
     };
   }
 
@@ -48,6 +64,9 @@ class ProfileModel {
       avatarUrl: map['avatar_url'],
       createdAt: map['created_at'] != null ? DateTime.parse(map['created_at']) : null,
       updatedAt: map['updated_at'] != null ? DateTime.parse(map['updated_at']) : null,
+      notificationEnabled: map['notification_enabled'] ?? false,
+      notificationHour: map['notification_hour'] ?? 9,
+      notificationMinute: map['notification_minute'] ?? 0,
     );
   }
 
@@ -57,7 +76,7 @@ class ProfileModel {
 
   @override
   String toString() {
-    return 'ProfileModel(id: $id, name: $name, avatarUrl: $avatarUrl, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ProfileModel(id: $id, name: $name, avatarUrl: $avatarUrl, notificationEnabled: $notificationEnabled, notificationHour: $notificationHour)';
   }
 
   @override

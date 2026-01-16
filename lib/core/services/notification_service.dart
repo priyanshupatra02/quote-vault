@@ -130,6 +130,94 @@ class NotificationService {
     return scheduledDate;
   }
 
+  /// Schedule multiple days of quote notifications
+  Future<void> scheduleMultipleQuotes({
+    required int hour,
+    required int minute,
+    required List<Map<String, String>> quotes, // List of {content, author}
+  }) async {
+    // Cancel existing notifications first
+    await cancelAllNotifications();
+
+    // Determine the start date
+    final now = tz.TZDateTime.now(tz.local);
+    var baseScheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
+
+    // If the time has passed for today, start from tomorrow
+    if (baseScheduledDate.isBefore(now)) {
+      baseScheduledDate = baseScheduledDate.add(const Duration(days: 1));
+    }
+
+    for (int i = 0; i < quotes.length; i++) {
+      final quote = quotes[i];
+      final notificationId = 100 + i; // Use different IDs for each day
+
+      // Calculate date for this quote relative to the base date
+      final scheduledDate = baseScheduledDate.add(Duration(days: i));
+
+      await _notifications.zonedSchedule(
+        notificationId,
+        '✨ Daily Quote',
+        '"${quote['content']}" — ${quote['author']}',
+        scheduledDate,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'daily_quote_channel',
+            'Daily Quote',
+            channelDescription: 'Daily inspirational quote notifications',
+            importance: Importance.high,
+            priority: Priority.high,
+            styleInformation: BigTextStyleInformation(
+              '"${quote['content']}" — ${quote['author']}',
+              contentTitle: '✨ Daily Quote',
+            ),
+          ),
+          iOS: const DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        payload: 'daily_quote_$i',
+      );
+
+      debugPrint('Scheduled quote #$i for ${scheduledDate.toString()}');
+    }
+
+    debugPrint('Scheduled ${quotes.length} daily quote notifications starting at $hour:$minute');
+  }
+
+  /// Calculate next instance of the specified time with day offset
+  tz.TZDateTime _nextInstanceOfTimeWithOffset(int hour, int minute, int dayOffset) {
+    final now = tz.TZDateTime.now(tz.local);
+    var scheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      hour,
+      minute,
+    );
+
+    // Add day offset
+    scheduledDate = scheduledDate.add(Duration(days: dayOffset));
+
+    // If the first notification time has passed today, start from tomorrow
+    if (dayOffset == 0 && scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
+
+    return scheduledDate;
+  }
+
   /// Show immediate notification (for testing)
   Future<void> showTestNotification({
     required String title,
