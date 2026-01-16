@@ -8,6 +8,7 @@ import 'package:quote_vault/features/discover/view/widgets/daily_insight_badge.d
 import 'package:quote_vault/features/discover/view/widgets/quote_display.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart';
 import 'package:quote_vault/features/quotes/controller/state/quotes_states.dart';
+import 'package:quote_vault/features/settings/controller/user_stats_provider.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
 import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
@@ -38,6 +39,8 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
   Widget build(BuildContext context) {
     final quotesState = ref.watch(quotesProvider);
     final currentIndex = ref.watch(currentQuoteIndexProvider);
+    // Initialize user stats (streak tracking)
+    ref.watch(userStatsProvider);
 
     // Get current quote from state
     QuoteModel? currentQuote;

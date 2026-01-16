@@ -167,6 +167,91 @@ class SupabaseHelper {
     }
   }
 
+  /// Update login streak
+  Future<Result<ProfileModel, APIException>> updateLoginStreak({
+    required String userId,
+  }) async {
+    try {
+      // Get current profile
+      final currentProfileResult = await getProfile(userId: userId);
+      ProfileModel currentProfile;
+
+      if (currentProfileResult.isSuccess()) {
+        currentProfile = currentProfileResult.tryGetSuccess()!;
+      } else {
+        return Error(currentProfileResult.tryGetError()!);
+      }
+
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+      final todayString = today.toIso8601String();
+
+      // Check last login date
+      int newStreak = 1;
+      if (currentProfile.lastLoginDate != null) {
+        final lastLoginFn = DateTime.parse(currentProfile.lastLoginDate!);
+        final lastLogin = DateTime(lastLoginFn.year, lastLoginFn.month, lastLoginFn.day);
+
+        final difference = today.difference(lastLogin).inDays;
+
+        if (difference == 0) {
+          // Already logged in today, return current profile
+          return Success(currentProfile);
+        } else if (difference == 1) {
+          // Consecutive day, increment streak
+          newStreak = currentProfile.loginStreak + 1;
+        } else {
+          // Missed a day or more, reset to 1
+          newStreak = 1;
+        }
+      }
+
+      final updates = <String, dynamic>{
+        'login_streak': newStreak,
+        'last_login_date': todayString,
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
+      final response =
+          await client.from('profiles').update(updates).eq('id', userId).select().single();
+
+      return Success(ProfileModel.fromMap(response));
+    } on PostgrestException catch (e) {
+      return Error(APIException(errorMessage: e.message));
+    } catch (e) {
+      return Error(APIException(errorMessage: e.toString()));
+    }
+  }
+
+  /// Increment share count
+  Future<Result<ProfileModel, APIException>> incrementShareCount({
+    required String userId,
+  }) async {
+    try {
+      // Get current profile
+      final currentProfileResult = await getProfile(userId: userId);
+      int currentShareCount = 0;
+
+      if (currentProfileResult.isSuccess()) {
+        currentShareCount = currentProfileResult.tryGetSuccess()!.shareCount;
+      }
+
+      final updates = <String, dynamic>{
+        'share_count': currentShareCount + 1,
+        'updated_at': DateTime.now().toIso8601String(),
+      };
+
+      final response =
+          await client.from('profiles').update(updates).eq('id', userId).select().single();
+
+      return Success(ProfileModel.fromMap(response));
+    } on PostgrestException catch (e) {
+      return Error(APIException(errorMessage: e.message));
+    } catch (e) {
+      return Error(APIException(errorMessage: e.toString()));
+    }
+  }
+
   /// Get random quotes for notification scheduling
   Future<Result<List<QuoteModel>, APIException>> getRandomQuotes({required int count}) async {
     try {

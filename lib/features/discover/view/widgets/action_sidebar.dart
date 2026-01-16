@@ -12,6 +12,7 @@ import 'package:quote_vault/data/model/quote_model.dart';
 import 'package:quote_vault/features/discover/view/pages/quote_card_editor_page.dart';
 import 'package:quote_vault/features/discover/view/widgets/quote_share_card.dart';
 import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart';
+import 'package:quote_vault/features/settings/controller/user_stats_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class ActionSidebar extends ConsumerWidget {
@@ -41,7 +42,7 @@ class ActionSidebar extends ConsumerWidget {
         SidebarActionButton(
           icon: Icons.ios_share,
           label: 'Share',
-          onTap: () => _handleShareInteract(context),
+          onTap: () => _handleShareInteract(context, ref),
         ),
       ],
     );
@@ -69,8 +70,9 @@ class ActionSidebar extends ConsumerWidget {
     );
   }
 
-  void _handleShareInteract(BuildContext context) {
+  void _handleShareInteract(BuildContext context, WidgetRef ref) {
     if (currentQuote == null) return;
+    ref.read(userStatsProvider.notifier).incrementShare();
 
     showModalBottomSheet(
       context: context,

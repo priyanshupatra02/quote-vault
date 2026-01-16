@@ -13,6 +13,10 @@ class ProfileModel {
   final int notificationMinute;
   // Settings
   final double fontSize;
+  // Stats
+  final int loginStreak;
+  final String? lastLoginDate;
+  final int shareCount;
 
   const ProfileModel({
     required this.id,
@@ -24,6 +28,9 @@ class ProfileModel {
     this.notificationHour = 9,
     this.notificationMinute = 0,
     this.fontSize = 50.0,
+    this.loginStreak = 0,
+    this.lastLoginDate,
+    this.shareCount = 0,
   });
 
   ProfileModel copyWith({
@@ -36,6 +43,9 @@ class ProfileModel {
     int? notificationHour,
     int? notificationMinute,
     double? fontSize,
+    int? loginStreak,
+    String? lastLoginDate,
+    int? shareCount,
   }) {
     return ProfileModel(
       id: id ?? this.id,
@@ -47,6 +57,9 @@ class ProfileModel {
       notificationHour: notificationHour ?? this.notificationHour,
       notificationMinute: notificationMinute ?? this.notificationMinute,
       fontSize: fontSize ?? this.fontSize,
+      loginStreak: loginStreak ?? this.loginStreak,
+      lastLoginDate: lastLoginDate ?? this.lastLoginDate,
+      shareCount: shareCount ?? this.shareCount,
     );
   }
 
@@ -61,6 +74,9 @@ class ProfileModel {
       'notification_hour': notificationHour,
       'notification_minute': notificationMinute,
       'font_size': fontSize,
+      'login_streak': loginStreak,
+      'last_login_date': lastLoginDate,
+      'share_count': shareCount,
     };
   }
 
@@ -75,6 +91,9 @@ class ProfileModel {
       notificationHour: map['notification_hour'] ?? 9,
       notificationMinute: map['notification_minute'] ?? 0,
       fontSize: (map['font_size'] as num?)?.toDouble() ?? 50.0,
+      loginStreak: map['login_streak'] ?? 0,
+      lastLoginDate: map['last_login_date'],
+      shareCount: map['share_count'] ?? 0,
     );
   }
 
