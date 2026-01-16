@@ -7,6 +7,7 @@ import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/auth/controller/pod/auth_pod.dart';
 import 'package:quote_vault/features/auth/controller/state/auth_states.dart';
 import 'package:quote_vault/features/auth/view/widgets/auth_input_fields.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 class LoginForm extends ConsumerStatefulWidget {
   const LoginForm({super.key});
@@ -128,7 +129,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 ? const SizedBox(
                     height: 20,
                     width: 20,
-                    child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                    child: AppLoader(progressColor: Colors.white),
                   )
                 : Text(
                     'Log In',

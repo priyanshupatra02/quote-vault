@@ -9,6 +9,7 @@ import 'package:quote_vault/features/categories/controller/state/categories_stat
 import 'package:quote_vault/features/discover/view/widgets/background_layer.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 @RoutePage()
 class ExplorePage extends ConsumerWidget {
@@ -151,7 +152,7 @@ class ExplorePage extends ConsumerWidget {
             child: Center(
               child: Padding(
                 padding: EdgeInsets.all(32),
-                child: CircularProgressIndicator(),
+                child: AppLoader(),
               ),
             ),
           );

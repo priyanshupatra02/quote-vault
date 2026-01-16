@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/auth/controller/auth_controller.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AvatarSelectionSheet extends ConsumerStatefulWidget {
@@ -85,7 +86,7 @@ class _AvatarSelectionSheetState extends ConsumerState<AvatarSelectionSheet> {
           ),
           const SizedBox(height: 20),
           if (_isLoading)
-            const Center(child: CircularProgressIndicator())
+            const Center(child: AppLoader())
           else if (_avatars.isEmpty)
             Center(
               child: Text(

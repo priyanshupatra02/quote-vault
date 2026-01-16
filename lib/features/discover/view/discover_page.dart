@@ -9,6 +9,7 @@ import 'package:quote_vault/features/discover/view/widgets/quote_display.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart';
 import 'package:quote_vault/features/quotes/controller/state/quotes_states.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 @RoutePage()
 class DiscoverPage extends ConsumerStatefulWidget {
@@ -96,7 +97,7 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
 
   Widget _buildQuotesContent(QuotesState state, int currentIndex) {
     if (state is QuotesLoadingState) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(child: AppLoader());
     }
 
     if (state is QuotesEmptyState) {

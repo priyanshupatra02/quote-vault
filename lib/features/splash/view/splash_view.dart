@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/bootstrap.dart';
 import 'package:quote_vault/features/splash/controller/future_initializer.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 ///This view displayed for initializing all the required things on initialization.
 /// This will help for initial loading screen for apps with heavy things initialization;
@@ -66,8 +67,7 @@ class _SplashViewState extends ConsumerState<SplashView> {
           futureInitializerPod,
           (previous, next) {
             if (next is AsyncData && next.value != null) {
-              talker.info(
-                  "Initialization takes ${stopwatch.elapsedMilliseconds}");
+              talker.info("Initialization takes ${stopwatch.elapsedMilliseconds}");
               widget.onInitialized(next.requireValue);
             }
           },
@@ -94,8 +94,7 @@ class LoaderChild extends StatefulWidget {
   State<LoaderChild> createState() => _LoaderChildState();
 }
 
-class _LoaderChildState extends State<LoaderChild>
-    with TickerProviderStateMixin {
+class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 2),
     vsync: this,
@@ -128,8 +127,8 @@ class _LoaderChildState extends State<LoaderChild>
             ),
             const Positioned(
               bottom: 44,
-              child: CircularProgressIndicator(
-                color: Colors.amber,
+              child: AppLoader(
+                progressColor: Colors.amber,
               ),
             ),
             const Positioned(

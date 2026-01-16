@@ -12,6 +12,7 @@ import 'package:quote_vault/features/collections/controller/state/collections_st
 import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart';
 import 'package:quote_vault/features/favorites/controller/state/favorites_states.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
+import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -372,7 +373,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
         return SliverToBoxAdapter(child: _buildEmptyState(isDark));
       },
       loadingWidget: () => const SliverToBoxAdapter(
-        child: Center(child: CircularProgressIndicator()),
+        child: Center(child: AppLoader()),
       ),
       errorWidget: (e, _) => SliverToBoxAdapter(
         child: Center(child: Text('Error: $e')),
@@ -407,7 +408,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
         return SliverToBoxAdapter(child: _buildEmptyState(isDark));
       },
       loadingWidget: () => const SliverToBoxAdapter(
-        child: Center(child: CircularProgressIndicator()),
+        child: Center(child: AppLoader()),
       ),
       errorWidget: (e, _) => SliverToBoxAdapter(
         child: Center(child: Text('Error: $e')),
