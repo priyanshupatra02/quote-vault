@@ -17,14 +17,16 @@ class SignUpHeader extends StatelessWidget {
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
               colors: [
-                AppColors.primary,
-                Colors.purple.shade400,
+                Theme.of(context).primaryColor,
+                Colors.purple
+                    .shade400, // Kept purple as secondary gradient for brand identity or change?
+                // Let's stick to primaryColor and a variant for now to respect choice
               ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: AppColors.primary.withOpacity(0.3),
+                color: Theme.of(context).primaryColor.withOpacity(0.3),
                 blurRadius: 12,
                 offset: const Offset(0, 4),
               ),

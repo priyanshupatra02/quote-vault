@@ -42,7 +42,7 @@ class AuthorResultTile extends StatelessWidget {
                 style: AppTextStyles.serif.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),

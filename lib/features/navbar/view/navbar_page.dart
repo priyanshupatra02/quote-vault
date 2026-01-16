@@ -88,7 +88,7 @@ class _NavbarPageState extends ConsumerState<NavbarPage> {
           labelTextStyle: WidgetStateProperty.all(
             Theme.of(context).textTheme.bodySmall,
           ),
-          indicatorColor: AppColors.primary.withOpacity(0.15),
+          indicatorColor: Theme.of(context).primaryColor.withOpacity(0.15),
           backgroundColor:
               isDark ? AppColors.backgroundDark.withOpacity(0.95) : Colors.white.withOpacity(0.95),
           surfaceTintColor: Colors.transparent,
@@ -105,7 +105,7 @@ class _NavbarPageState extends ConsumerState<NavbarPage> {
               ),
               selectedIcon: Icon(
                 Icons.home,
-                color: AppColors.primary,
+                color: Theme.of(context).primaryColor,
               ),
               label: 'Home',
             ),
@@ -116,7 +116,7 @@ class _NavbarPageState extends ConsumerState<NavbarPage> {
               ),
               selectedIcon: Icon(
                 Icons.explore,
-                color: AppColors.primary,
+                color: Theme.of(context).primaryColor,
               ),
               label: 'Explore',
             ),
@@ -127,7 +127,7 @@ class _NavbarPageState extends ConsumerState<NavbarPage> {
               ),
               selectedIcon: Icon(
                 Icons.bookmark,
-                color: AppColors.primary,
+                color: Theme.of(context).primaryColor,
               ),
               label: 'Vault',
             ),
@@ -138,7 +138,7 @@ class _NavbarPageState extends ConsumerState<NavbarPage> {
               ),
               selectedIcon: Icon(
                 Icons.settings,
-                color: AppColors.primary,
+                color: Theme.of(context).primaryColor,
               ),
               label: 'Settings',
             ),

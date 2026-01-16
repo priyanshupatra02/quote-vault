@@ -25,8 +25,9 @@ class QuoteDisplay extends ConsumerWidget {
     final authorColor = AppColors.authorText(context);
 
     // Author line color: gold-muted in light, primary in dark
-    final lineColor =
-        isDark ? AppColors.primary.withOpacity(0.5) : AppColors.goldMuted.withOpacity(0.4);
+    final lineColor = isDark
+        ? Theme.of(context).primaryColor.withOpacity(0.5)
+        : AppColors.goldMuted.withOpacity(0.4);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0),

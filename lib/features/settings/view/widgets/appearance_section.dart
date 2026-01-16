@@ -82,7 +82,7 @@ class AppearanceSection extends ConsumerWidget {
                             .changeTheme(val ? ThemeMode.dark : ThemeMode.light);
                       },
                       activeThumbColor: Colors.white,
-                      activeTrackColor: AppColors.primary,
+                      activeTrackColor: Theme.of(context).primaryColor,
                     ),
                   ],
                 ),

@@ -106,7 +106,10 @@ class ActionSidebar extends ConsumerWidget {
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.7)],
+                          colors: [
+                            Theme.of(context).primaryColor,
+                            Theme.of(context).primaryColor.withOpacity(0.7)
+                          ],
                         ),
                         borderRadius: BorderRadius.circular(12),
                       ),

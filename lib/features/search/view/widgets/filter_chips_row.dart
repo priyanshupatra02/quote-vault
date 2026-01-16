@@ -38,12 +38,12 @@ class _ActiveFilterChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 12, right: 4, top: 4, bottom: 4),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        color: Theme.of(context).primaryColor,
         borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: AppColors.primary.withOpacity(0.2)),
+        border: Border.all(color: Theme.of(context).primaryColor.withOpacity(0.2)),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.2),
+            color: Theme.of(context).primaryColor.withOpacity(0.2),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
