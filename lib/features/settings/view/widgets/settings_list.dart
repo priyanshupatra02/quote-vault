@@ -18,7 +18,7 @@ class SettingsList extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           child: Text(
             'Settings',
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: AppColors.text(context),
@@ -51,7 +51,7 @@ class SettingsList extends ConsumerWidget {
                   children: [
                     Text(
                       Theme.of(context).brightness == Brightness.dark ? 'Dark' : 'Light',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 14,
                         color: Colors.grey.shade400,
                       ),
@@ -131,7 +131,7 @@ class SettingsListItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppColors.text(context),

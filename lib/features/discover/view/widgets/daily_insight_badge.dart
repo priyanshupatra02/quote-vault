@@ -44,7 +44,7 @@ class DailyInsightBadge extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'DAILY INSIGHT',
-                style: AppTextStyles.dailyInsightBadge.copyWith(
+                style: AppTextStyles.dailyInsightBadge(context).copyWith(
                   color: isDark ? AppColors.primary : AppColors.charcoal.withOpacity(0.8),
                   fontSize: 10,
                   fontWeight: FontWeight.w700,

@@ -14,7 +14,7 @@ class BackToLoginLink extends StatelessWidget {
       children: [
         Text(
           'Remember your password?',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body(context).copyWith(
             fontSize: 14,
             color: AppColors.textSecondary(context),
           ),
@@ -30,7 +30,7 @@ class BackToLoginLink extends StatelessWidget {
           ),
           child: Text(
             'Log in',
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body(context).copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w600,
               color: Theme.of(context).primaryColor,

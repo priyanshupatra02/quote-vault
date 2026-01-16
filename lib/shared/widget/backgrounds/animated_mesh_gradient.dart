@@ -53,20 +53,24 @@ class _AnimatedMeshGradientState extends State<AnimatedMeshGradient>
     final primary = Theme.of(context).primaryColor;
 
     // Define palette
-    final Color c1 =
-        isDark ? primary.withOpacity(0.3) : primary.withOpacity(0.15); // Top-left accent
+    // Define palette
+    final Color c1 = isDark
+        ? const Color(0xFF4C1D95).withOpacity(0.8) // Deep Purple (richer)
+        : primary.withOpacity(0.15);
 
     final Color c2 = isDark
-        ? const Color.fromARGB(255, 205, 180, 254).withOpacity(0.4)
-        : AppColors.lavenderSoft; // Secondary accent
+        ? const Color(0xFF7C3AED).withOpacity(0.6) // Vibrant Violet
+        : AppColors.lavenderSoft;
 
-    final Color c3 = isDark ? AppColors.kGrey100.withOpacity(0.1) : Colors.white; // Base
+    final Color c3 = isDark
+        ? const Color(0xFF0F172A) // Dark Navy/Black base
+        : Colors.white;
 
     // Calculating dynamic color inside build to respond to theme changes
     // Interpolating between primary and gold/muted tones for a premium feel
     final dynamicColor = Color.lerp(
             primary.withOpacity(isDark ? 0.4 : 0.2),
-            isDark ? AppColors.primary.withOpacity(0.3) : AppColors.primary.withOpacity(0.4),
+            isDark ? const Color(0xFFC084FC).withOpacity(0.3) : AppColors.primary.withOpacity(0.4),
             _colorShift.value) ??
         primary;
 

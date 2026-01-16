@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/data/model/category_model.dart';
@@ -65,16 +66,16 @@ class CategoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  category?.name ?? 'Category',
-                  style: AppTextStyles.categoryTitle.copyWith(
-                    color: const Color(0xFF0F172A),
+                  category?.name ?? AppStrings.categoryDefault,
+                  style: AppTextStyles.categoryTitle(context).copyWith(
+                    color: AppColors.text(context),
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Explore quotes',
-                  style: AppTextStyles.subDetail.copyWith(
-                    color: const Color(0xFF475569),
+                  AppStrings.exploreQuotes,
+                  style: AppTextStyles.subDetail(context).copyWith(
+                    color: AppColors.textSecondary(context),
                   ),
                 ),
               ],
@@ -135,8 +136,8 @@ class WideCategoryCard extends StatelessWidget {
                   children: [
                     Text(
                       category.name,
-                      style: AppTextStyles.categoryTitleLarge.copyWith(
-                        color: const Color(0xFF0F172A),
+                      style: AppTextStyles.categoryTitleLarge(context).copyWith(
+                        color: AppColors.text(context),
                       ),
                     ),
                     const SizedBox(height: 2),
@@ -155,7 +156,7 @@ class WideCategoryCard extends StatelessWidget {
               child: Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: AppColors.text(context).withOpacity(0.5),
+                color: AppColors.textSecondary(context),
               ),
             ),
           ],

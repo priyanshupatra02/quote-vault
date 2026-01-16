@@ -15,19 +15,19 @@ class SettingsDebugSection extends ConsumerWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
           child: Text(
-            'DEBUG OPTIONS',
-            style: AppTextStyles.sectionLabel.copyWith(
-              color: Colors.orange,
+            'Advanced',
+            style: AppTextStyles.sectionLabel(context).copyWith(
+              color: AppColors.textSecondary(context),
             ),
           ),
         ),
         const SizedBox(height: 8),
         Container(
           decoration: BoxDecoration(
-            color: Colors.orange.withOpacity(0.1),
+            color: AppColors.surface(context),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-              color: Colors.orange.withOpacity(0.3),
+              color: AppColors.textSecondary(context).withOpacity(0.2),
             ),
           ),
           child: ListTile(
@@ -35,32 +35,32 @@ class SettingsDebugSection extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: Colors.orange.withOpacity(0.2),
+                color: AppColors.primary.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: const Icon(
-                Icons.notifications_active,
-                color: Colors.orange,
+                Icons.notifications_outlined,
+                color: AppColors.primary,
                 size: 22,
               ),
             ),
             title: Text(
-              'Test Daily Quote Notification',
-              style: AppTextStyles.label.copyWith(
+              'Preview Daily Quote',
+              style: AppTextStyles.label(context).copyWith(
                 color: AppColors.text(context),
                 fontWeight: FontWeight.w600,
               ),
             ),
             subtitle: Text(
-              'Send a test push notification',
-              style: AppTextStyles.label.copyWith(
+              'Send yourself a test notification to see how it looks',
+              style: AppTextStyles.label(context).copyWith(
                 color: AppColors.textSecondary(context),
                 fontSize: 12,
               ),
             ),
             trailing: Icon(
-              Icons.send,
-              color: Colors.orange.withOpacity(0.7),
+              Icons.chevron_right_rounded,
+              color: AppColors.textSecondary(context),
               size: 20,
             ),
             onTap: () async {

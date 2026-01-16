@@ -51,7 +51,7 @@ class QuoteResultCard extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 24.0), // space for bookmark
                 child: Text(
                   '"$text"',
-                  style: AppTextStyles.serif.copyWith(
+                  style: AppTextStyles.serif(context).copyWith(
                     fontSize: 18,
                     color: Colors.grey.shade100, // text-gray-100
                     height: 1.6, // leading-relaxed
@@ -69,7 +69,7 @@ class QuoteResultCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     author.toUpperCase(),
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.display(context).copyWith(
                       fontSize: 11, // text-xs
                       fontWeight: FontWeight.bold,
                       color: Colors.grey.shade500,

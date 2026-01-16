@@ -85,7 +85,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                     ),
                     decoration: InputDecoration(
                       hintText: 'Search vault...',
-                      hintStyle: AppTextStyles.searchHint.copyWith(
+                      hintStyle: AppTextStyles.searchHint(context).copyWith(
                         color: isDark ? Colors.white38 : Colors.grey[400],
                       ),
                       border: InputBorder.none,
@@ -93,7 +93,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                   )
                 : Text(
                     'My Vault',
-                    style: AppTextStyles.pageTitle.copyWith(
+                    style: AppTextStyles.pageTitle(context).copyWith(
                       fontSize: 24,
                       color: isDark ? Colors.white : const Color(0xFF0F172A),
                     ),
@@ -201,7 +201,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                         const SizedBox(width: 6),
                         Text(
                           'CLOUD SYNCED',
-                          style: AppTextStyles.sectionLabel.copyWith(
+                          style: AppTextStyles.sectionLabel(context).copyWith(
                             fontSize: 10,
                             letterSpacing: 0.8,
                             color: isDark ? AppColors.primary : const Color(0xFF4338CA),
@@ -215,7 +215,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                   // Stats
                   Text(
                     totalQuotes.toString(),
-                    style: AppTextStyles.pageTitle.copyWith(
+                    style: AppTextStyles.pageTitle(context).copyWith(
                       fontSize: 40,
                       fontWeight: FontWeight.w800,
                       color: isDark ? Colors.white : const Color(0xFF0F172A),
@@ -225,7 +225,7 @@ class _SavedPageState extends ConsumerState<SavedPage> {
                   const SizedBox(height: 4),
                   Text(
                     'Saved quotes',
-                    style: AppTextStyles.subDetail.copyWith(
+                    style: AppTextStyles.subDetail(context).copyWith(
                       fontSize: 14,
                       color: isDark ? Colors.white54 : Colors.grey[500],
                     ),

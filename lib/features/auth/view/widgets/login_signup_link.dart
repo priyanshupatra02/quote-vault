@@ -13,7 +13,7 @@ class LoginSignupLink extends StatelessWidget {
       children: [
         Text(
           "Don't have an account? ",
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             color: Colors.grey.shade500,
             fontSize: 14,
           ),
@@ -24,7 +24,7 @@ class LoginSignupLink extends StatelessWidget {
           },
           child: Text(
             'Sign Up',
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 14,

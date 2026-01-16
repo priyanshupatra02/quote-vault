@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 /// Typography system for QuoteVault
 ///
@@ -11,141 +10,107 @@ class AppTextStyles {
   const AppTextStyles._();
 
   // Base font families
-  static TextStyle get display => GoogleFonts.inter();
-  static TextStyle get serif => GoogleFonts.playfairDisplay();
-  static TextStyle get serifAlt => GoogleFonts.lora();
+  // Base font families - kept for utility if needed, but prefer Theme access
+  static TextStyle display(BuildContext context) => Theme.of(context).textTheme.bodyMedium!;
+  static TextStyle serif(BuildContext context) => Theme.of(context).textTheme.headlineMedium!;
+  static TextStyle serifAlt(BuildContext context) => Theme.of(context).textTheme.titleMedium!;
 
   // ===========================================
-  // HEADERS (Playfair Display - Bold/700)
+  // HEADERS
   // ===========================================
 
-  /// Page title - "Explore", "Discover", etc.
-  static TextStyle get pageTitle => serif.copyWith(
-        fontSize: 32,
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
-      );
+  /// Page title - "Explore", "Discover" (Playfair 32)
+  static TextStyle pageTitle(BuildContext context) => Theme.of(context).textTheme.headlineMedium!;
 
-  static TextStyle get headline1 => serif.copyWith(
-        fontSize: 36,
-        fontWeight: FontWeight.w500,
-        height: 1.2,
-        letterSpacing: -0.5,
-      );
+  /// Main Headings - "Keep Going" (Playfair 36)
+  static TextStyle headline1(BuildContext context) => Theme.of(context).textTheme.headlineLarge!;
 
-  static TextStyle get headline1Large => headline1.copyWith(
-        fontSize: 42,
-      );
+  /// Large Headings - (Playfair 42)
+  static TextStyle headline1Large(BuildContext context) =>
+      Theme.of(context).textTheme.displaySmall!;
 
   // ===========================================
-  // CATEGORY TITLES (Lora/Playfair - Bold/600-700)
+  // CATEGORY TITLES
   // ===========================================
 
-  /// Category card titles - "Motivation", "Love", etc.
-  static TextStyle get categoryTitle => serifAlt.copyWith(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-      );
+  /// Category card titles - "Motivation" (Lora 16)
+  static TextStyle categoryTitle(BuildContext context) => Theme.of(context).textTheme.titleMedium!;
 
-  /// Wide category card title
-  static TextStyle get categoryTitleLarge => serifAlt.copyWith(
-        fontSize: 20,
-        fontWeight: FontWeight.w600,
-      );
+  /// Wide category card title (Lora 20)
+  static TextStyle categoryTitleLarge(BuildContext context) =>
+      Theme.of(context).textTheme.titleLarge!;
 
   // ===========================================
-  // SUPPORTING TEXT (Inter - Medium 500 / Regular 400)
+  // SUPPORTING TEXT
   // ===========================================
 
-  /// Section headers - "FEATURED AUTHORS", "BROWSE BY CATEGORY"
-  static TextStyle get sectionLabel => display.copyWith(
-        fontSize: 11,
-        fontWeight: FontWeight.w700,
-        letterSpacing: 1.5,
-      );
+  /// Section headers - "FEATURED AUTHORS" (Inter 11)
+  static TextStyle sectionLabel(BuildContext context) => Theme.of(context).textTheme.labelSmall!;
 
-  /// Sub-details - "2.4k Quotes", "Lighten your day"
-  static TextStyle get subDetail => display.copyWith(
-        fontSize: 10,
-        fontWeight: FontWeight.w500,
-      );
+  /// Sub-details - "2.4k Quotes" (Inter 10)
+  static TextStyle subDetail(BuildContext context) => Theme.of(context).textTheme.bodySmall!;
 
-  /// Search placeholder and hints
-  static TextStyle get searchHint => display.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-      );
+  /// Search placeholder and hints (Inter 14)
+  static TextStyle searchHint(BuildContext context) => Theme.of(context).textTheme.bodyMedium!;
 
   // ===========================================
-  // AUTHOR NAMES (Inter - Semi-Bold 600)
+  // AUTHOR NAMES
   // ===========================================
 
-  /// Author names in carousel
-  static TextStyle get authorName => display.copyWith(
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-        height: 1.3,
-      );
+  /// Author names in carousel (Inter 11)
+  static TextStyle authorName(BuildContext context) => Theme.of(context).textTheme.labelMedium!;
 
-  /// Author initials in avatars
-  static TextStyle get authorInitials => serif.copyWith(
-        fontSize: 24,
-      );
+  /// Author initials in avatars (Playfair 24)
+  static TextStyle authorInitials(BuildContext context) =>
+      Theme.of(context).textTheme.headlineSmall!;
 
-  /// Large author name (for author detail pages)
-  static TextStyle get authorNameLarge => display.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 2.1,
-      );
+  /// Large author name (Inter 14 Bold)
+  static TextStyle authorNameLarge(BuildContext context) =>
+      Theme.of(context).textTheme.bodyMedium!.copyWith(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.1,
+          );
 
   // ===========================================
-  // NAVIGATION (Inter - Bold 700 for active)
+  // NAVIGATION
   // ===========================================
 
   /// Bottom nav active label
-  static TextStyle get navLabelActive => display.copyWith(
-        fontSize: 10,
-        fontWeight: FontWeight.w700,
-      );
+  static TextStyle navLabelActive(BuildContext context) =>
+      Theme.of(context).textTheme.labelSmall!.copyWith(
+            fontSize: 10,
+            fontWeight: FontWeight.w700,
+          );
 
   /// Bottom nav inactive label
-  static TextStyle get navLabelInactive => display.copyWith(
-        fontSize: 10,
-        fontWeight: FontWeight.w600,
-      );
+  static TextStyle navLabelInactive(BuildContext context) =>
+      Theme.of(context).textTheme.labelSmall!.copyWith(
+            fontSize: 10,
+            fontWeight: FontWeight.w600,
+          );
 
-  static TextStyle get bottomNavText => navLabelInactive;
+  static TextStyle bottomNavText(BuildContext context) => navLabelInactive(context);
 
   // ===========================================
   // GENERAL UI ELEMENTS
   // ===========================================
 
-  static TextStyle get buttonText => display.copyWith(
-        fontSize: 11,
-        fontWeight: FontWeight.w600,
-      );
+  static TextStyle buttonText(BuildContext context) =>
+      Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: 11,
+            fontWeight: FontWeight.w600,
+          );
 
-  static TextStyle get dailyInsightBadge => display.copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.5,
-      );
+  static TextStyle dailyInsightBadge(BuildContext context) =>
+      Theme.of(context).textTheme.labelLarge!;
 
-  static TextStyle get label => display.copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0.5,
-      );
+  static TextStyle label(BuildContext context) => Theme.of(context).textTheme.labelLarge!;
 
-  static TextStyle get body => display.copyWith(
-        fontSize: 14,
-        fontWeight: FontWeight.normal,
-      );
+  static TextStyle body(BuildContext context) => Theme.of(context).textTheme.bodyMedium!;
 
   /// Link text - "View All"
-  static TextStyle get linkText => display.copyWith(
-        fontSize: 12,
-        fontWeight: FontWeight.w600,
-      );
+  static TextStyle linkText(BuildContext context) =>
+      Theme.of(context).textTheme.labelLarge!.copyWith(
+            fontSize: 12,
+          );
 }

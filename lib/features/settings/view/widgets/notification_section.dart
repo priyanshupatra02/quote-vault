@@ -135,7 +135,7 @@ class _NotificationSectionState extends ConsumerState<NotificationSection> {
           padding: const EdgeInsets.only(left: 8.0, bottom: 12),
           child: Text(
             'NOTIFICATIONS',
-            style: AppTextStyles.label.copyWith(
+            style: AppTextStyles.label(context).copyWith(
               color: AppColors.textSecondary(context),
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -196,7 +196,7 @@ class _NotificationSectionState extends ConsumerState<NotificationSection> {
                         children: [
                           Text(
                             'Daily Inspiration',
-                            style: AppTextStyles.display.copyWith(
+                            style: AppTextStyles.display(context).copyWith(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppColors.text(context),
@@ -205,7 +205,7 @@ class _NotificationSectionState extends ConsumerState<NotificationSection> {
                           const SizedBox(height: 2),
                           Text(
                             isEnabled ? 'Synced to cloud ✓' : 'Disabled',
-                            style: AppTextStyles.label.copyWith(
+                            style: AppTextStyles.label(context).copyWith(
                               fontSize: 12,
                               color:
                                   isEnabled ? AppColors.primary : AppColors.textSecondary(context),
@@ -252,7 +252,7 @@ class _NotificationSectionState extends ConsumerState<NotificationSection> {
                         const SizedBox(width: 12),
                         Text(
                           'Notification Time',
-                          style: AppTextStyles.display.copyWith(
+                          style: AppTextStyles.display(context).copyWith(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,
                             color: AppColors.textSecondary(context),
@@ -267,7 +267,7 @@ class _NotificationSectionState extends ConsumerState<NotificationSection> {
                           ),
                           child: Text(
                             timeDisplay,
-                            style: AppTextStyles.display.copyWith(
+                            style: AppTextStyles.display(context).copyWith(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
                               color: AppColors.primary,

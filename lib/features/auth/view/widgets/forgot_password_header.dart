@@ -36,7 +36,7 @@ class ForgotPasswordHeader extends StatelessWidget {
         // Header
         Text(
           'Reset Password',
-          style: AppTextStyles.headline1.copyWith(
+          style: AppTextStyles.headline1(context).copyWith(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: AppColors.text(context),
@@ -47,7 +47,7 @@ class ForgotPasswordHeader extends StatelessWidget {
         const SizedBox(height: 12),
         Text(
           'Enter your email address and we will send you a link to reset your password.',
-          style: AppTextStyles.body.copyWith(
+          style: AppTextStyles.body(context).copyWith(
             fontSize: 16,
             color: isDark ? Colors.white70 : AppColors.text(context).withOpacity(0.8),
             height: 1.5,

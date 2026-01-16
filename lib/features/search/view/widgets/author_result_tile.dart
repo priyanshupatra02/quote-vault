@@ -39,7 +39,7 @@ class AuthorResultTile extends StatelessWidget {
             child: Center(
               child: Text(
                 initial,
-                style: AppTextStyles.serif.copyWith(
+                style: AppTextStyles.serif(context).copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
@@ -56,7 +56,7 @@ class AuthorResultTile extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
@@ -64,7 +64,7 @@ class AuthorResultTile extends StatelessWidget {
                 ),
                 Text(
                   description,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 12,
                     color: Colors.grey.shade500,
                   ),

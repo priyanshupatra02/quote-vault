@@ -1,10 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/features/auth/controller/auth_controller.dart';
 import 'package:quote_vault/features/settings/view/widgets/appearance_section.dart';
 import 'package:quote_vault/features/settings/view/widgets/cloud_sync_section.dart';
 import 'package:quote_vault/features/settings/view/widgets/notification_section.dart';
@@ -42,8 +43,8 @@ class SettingsPage extends ConsumerWidget {
           ),
         ),
         title: Text(
-          'Profile',
-          style: AppTextStyles.pageTitle.copyWith(
+          AppStrings.profileTitle,
+          style: AppTextStyles.pageTitle(context).copyWith(
             fontSize: 20,
             color: AppColors.text(context),
           ),
@@ -52,12 +53,15 @@ class SettingsPage extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
-              child: Text(
-                'Edit',
-                style: AppTextStyles.display.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.primary,
+              child: GestureDetector(
+                onTap: () => _showUpdateNameDialog(context, ref),
+                child: Text(
+                  AppStrings.editButton,
+                  style: AppTextStyles.display(context).copyWith(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
             ),
@@ -88,8 +92,8 @@ class SettingsPage extends ConsumerWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   child: Text(
-                    'HEADS UP',
-                    style: AppTextStyles.sectionLabel.copyWith(
+                    AppStrings.headsUpSection,
+                    style: AppTextStyles.sectionLabel(context).copyWith(
                       color: AppColors.textSecondary(context),
                     ),
                   ),
@@ -105,8 +109,8 @@ class SettingsPage extends ConsumerWidget {
                 const NotificationSection(),
                 const SizedBox(height: 32),
 
-                // Debug Section (only in debug mode)
-                if (kDebugMode) const SettingsDebugSection(),
+                // Debug Section
+                const SettingsDebugSection(),
 
                 // Log Out & Footer
                 Column(
@@ -120,8 +124,8 @@ class SettingsPage extends ConsumerWidget {
                         }
                       },
                       child: Text(
-                        'Log Out',
-                        style: AppTextStyles.display.copyWith(
+                        AppStrings.logOutButton,
+                        style: AppTextStyles.display(context).copyWith(
                           fontSize: 17,
                           fontWeight: FontWeight.w400,
                           color: const Color(0xFFFF3B30), // iOS Red
@@ -131,7 +135,7 @@ class SettingsPage extends ConsumerWidget {
                     const SizedBox(height: 8),
                     Text(
                       'QuoteVault v2.4.0 (Build 120)',
-                      style: AppTextStyles.label.copyWith(
+                      style: AppTextStyles.label(context).copyWith(
                         color: AppColors.textSecondary(context),
                         fontSize: 13,
                       ),
@@ -143,6 +147,73 @@ class SettingsPage extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showUpdateNameDialog(BuildContext context, WidgetRef ref) {
+    final user = ref.read(authControllerProvider).value;
+    // Get current name same logic as ProfileSection to pre-fill
+    final email = user?.email ?? '';
+    final metadata = user?.userMetadata;
+    final currentName = metadata?['full_name'] ??
+        metadata?['name'] ??
+        (email.isNotEmpty
+            ? email.split('@')[0].split('.').map((e) => e.capitalize()).join(' ')
+            : '');
+
+    final controller = TextEditingController(text: currentName);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Text(
+          'Update Name',
+          style: AppTextStyles.display(context).copyWith(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: AppColors.text(context),
+          ),
+        ),
+        content: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: 'Display Name',
+            hintText: 'Enter your name',
+            labelStyle: TextStyle(color: AppColors.textSecondary(context)),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey[300]!),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            ),
+          ),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: AppColors.textSecondary(context)),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              if (controller.text.isNotEmpty) {
+                ref.read(authControllerProvider.notifier).updateName(controller.text);
+              }
+            },
+            child: const Text(
+              'Save',
+              style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
       ),
     );
   }

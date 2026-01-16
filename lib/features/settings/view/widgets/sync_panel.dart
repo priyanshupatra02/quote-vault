@@ -45,7 +45,7 @@ class _SyncPanelState extends State<SyncPanel> {
                     const SizedBox(width: 8),
                     Text(
                       'Cloud Sync',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: AppColors.text(context),
@@ -58,7 +58,7 @@ class _SyncPanelState extends State<SyncPanel> {
                 // Wrap text to avoid overflow
                 Text(
                   'Your quotes are backed up across all devices automatically.',
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 14,
                     fontWeight: FontWeight.normal,
                     color: AppColors.textSecondary(context),
@@ -71,7 +71,7 @@ class _SyncPanelState extends State<SyncPanel> {
                     const SizedBox(width: 4),
                     Text(
                       'Last synced: Just now',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                         color: Colors.teal.shade500, // emerald-400

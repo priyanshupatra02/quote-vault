@@ -15,15 +15,46 @@ import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart
 import 'package:quote_vault/features/settings/controller/user_stats_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class ActionSidebar extends ConsumerWidget {
+class ActionSidebar extends ConsumerStatefulWidget {
   final QuoteModel? currentQuote;
 
   const ActionSidebar({super.key, this.currentQuote});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorite =
-        currentQuote != null ? ref.watch(isFavoriteProvider(currentQuote!.id)) : false;
+  ConsumerState<ActionSidebar> createState() => _ActionSidebarState();
+}
+
+class _ActionSidebarState extends ConsumerState<ActionSidebar> {
+  // Local optimistic state
+  bool? _optimisticIsLiked;
+  int? _optimisticLikeCount;
+
+  @override
+  void didUpdateWidget(covariant ActionSidebar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Reset optimistic state when quote changes
+    if (widget.currentQuote?.id != oldWidget.currentQuote?.id) {
+      _optimisticIsLiked = null;
+      _optimisticLikeCount = null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final quote = widget.currentQuote;
+    if (quote == null) return const SizedBox.shrink();
+
+    // Determine current state: Use optimistic if available, otherwise source of truth
+    final isFavoriteSource = ref.watch(isFavoriteProvider(quote.id));
+    final isLiked = _optimisticIsLiked ?? isFavoriteSource;
+
+    // Calculate display count
+    // If we have an optimistic count, use it.
+    // Otherwise use the quote's count.
+    // We also need to handle the case where the source of truth (isFavoriteSource)
+    // might be different from when we initialized the count, but for now
+    // assuming quote.likesCount is the baseline.
+    final displayCount = _optimisticLikeCount ?? quote.likesCount;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -31,10 +62,10 @@ class ActionSidebar extends ConsumerWidget {
       children: [
         // Like/Favorite Button
         SidebarActionButton(
-          icon: isFavorite ? Icons.favorite : Icons.favorite_border,
-          label: currentQuote?.likesCount.toString() ?? '0',
-          isLiked: isFavorite,
-          onTap: () => _handleLike(context, ref),
+          icon: isLiked ? Icons.favorite : Icons.favorite_border,
+          label: displayCount.toString(),
+          isLiked: isLiked,
+          onTap: () => _handleLike(quote, isLiked, displayCount),
         ),
         const SizedBox(height: 20),
 
@@ -48,21 +79,28 @@ class ActionSidebar extends ConsumerWidget {
     );
   }
 
-  void _handleLike(BuildContext context, WidgetRef ref) {
-    if (currentQuote == null) return;
+  void _handleLike(QuoteModel quote, bool currentLikedState, int currentCount) {
+    // 1. Optimistic Update
+    setState(() {
+      _optimisticIsLiked = !currentLikedState;
+      _optimisticLikeCount =
+          currentLikedState ? (currentCount - 1).clamp(0, 999999) : (currentCount + 1);
+    });
 
-    ref.read(favoritesProvider.notifier).toggleFavorite(currentQuote!);
-
-    // Haptic feedback
+    // 2. Haptic feedback immediately
     HapticFeedback.lightImpact();
 
-    // Show snackbar
+    // 3. API Call in background
+    ref.read(favoritesProvider.notifier).toggleFavorite(quote);
+
+    // 4. Show snackbar
+    ScaffoldMessenger.of(context).clearSnackBars(); // Clear existing to prevent stacking
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          ref.read(isFavoriteProvider(currentQuote!.id))
-              ? 'Removed from favorites'
-              : 'Added to favorites',
+          !currentLikedState // use the NEW state (which is !current)
+              ? 'Added to favorites'
+              : 'Removed from favorites',
         ),
         duration: const Duration(seconds: 1),
         behavior: SnackBarBehavior.floating,
@@ -71,7 +109,7 @@ class ActionSidebar extends ConsumerWidget {
   }
 
   void _handleShareInteract(BuildContext context, WidgetRef ref) {
-    if (currentQuote == null) return;
+    if (widget.currentQuote == null) return;
     ref.read(userStatsProvider.notifier).incrementShare();
 
     showModalBottomSheet(
@@ -118,7 +156,7 @@ class ActionSidebar extends ConsumerWidget {
                     const SizedBox(width: 12),
                     Text(
                       'Share Quote',
-                      style: AppTextStyles.pageTitle.copyWith(
+                      style: AppTextStyles.pageTitle(context).copyWith(
                         fontSize: 18,
                         color: AppColors.text(context),
                       ),
@@ -159,7 +197,7 @@ class ActionSidebar extends ConsumerWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => QuoteCardEditorPage(quote: currentQuote!),
+                        builder: (_) => QuoteCardEditorPage(quote: widget.currentQuote!),
                       ),
                     );
                   },
@@ -174,11 +212,11 @@ class ActionSidebar extends ConsumerWidget {
 
   void _shareAsText() {
     final shareText =
-        '"${currentQuote!.content}"\n\n— ${currentQuote!.author}\n\nShared via QuoteVault';
+        '"${widget.currentQuote!.content}"\n\n— ${widget.currentQuote!.author}\n\nShared via QuoteVault';
 
     Share.share(
       shareText,
-      subject: 'Quote by ${currentQuote!.author}',
+      subject: 'Quote by ${widget.currentQuote!.author}',
     );
     HapticFeedback.lightImpact();
   }
@@ -186,7 +224,7 @@ class ActionSidebar extends ConsumerWidget {
   void _shareAsImage(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => _SharePreviewDialog(quote: currentQuote!),
+      builder: (context) => _SharePreviewDialog(quote: widget.currentQuote!),
     );
   }
 }
@@ -428,7 +466,7 @@ class _ShareOptionTile extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.label.copyWith(
+                      style: AppTextStyles.label(context).copyWith(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: AppColors.text(context),
@@ -437,7 +475,7 @@ class _ShareOptionTile extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       subtitle,
-                      style: AppTextStyles.subDetail.copyWith(
+                      style: AppTextStyles.subDetail(context).copyWith(
                         fontSize: 12,
                         color: AppColors.textSecondary(context),
                       ),

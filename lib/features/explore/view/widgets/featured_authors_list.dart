@@ -40,7 +40,7 @@ class FeaturedAuthorsList extends StatelessWidget {
             children: [
               Text(
                 'Trending Authors',
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display(context).copyWith(
                   fontSize: 20, // text-xl
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -107,7 +107,7 @@ class FeaturedAuthorsList extends StatelessWidget {
                       textAlign: TextAlign.center,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 12, // text-xs
                         fontWeight: FontWeight.w500,
                         color: Colors.grey.shade300,

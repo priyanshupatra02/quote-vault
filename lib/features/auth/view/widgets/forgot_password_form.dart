@@ -52,7 +52,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             'Email Address',
-            style: AppTextStyles.label.copyWith(
+            style: AppTextStyles.label(context).copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: AppColors.text(context),
@@ -73,12 +73,12 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
           child: TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body(context).copyWith(
               color: AppColors.text(context),
             ),
             decoration: InputDecoration(
               hintText: 'john.doe@example.com',
-              hintStyle: AppTextStyles.body.copyWith(
+              hintStyle: AppTextStyles.body(context).copyWith(
                 color: AppColors.textSecondary(context),
               ),
               filled: true,
@@ -130,7 +130,7 @@ class _ForgotPasswordFormState extends ConsumerState<ForgotPasswordForm> {
                   )
                 : Text(
                     'Send Reset Link',
-                    style: AppTextStyles.buttonText.copyWith(
+                    style: AppTextStyles.buttonText(context).copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 0.2,

@@ -42,7 +42,7 @@ class SavedFolderCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             title,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: AppColors.text(context),
@@ -51,7 +51,7 @@ class SavedFolderCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             '$count quotes',
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 12,
               color: AppColors.text(context).withOpacity(0.5), // gray-400
             ),

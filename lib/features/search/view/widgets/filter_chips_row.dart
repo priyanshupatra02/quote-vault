@@ -54,7 +54,7 @@ class _ActiveFilterChip extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w500,
               color: Colors.white,
@@ -103,7 +103,7 @@ class _DropdownFilterChip extends StatelessWidget {
         children: [
           Text(
             label,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 12,
               fontWeight: FontWeight.w500,
               color: Colors.grey.shade300,

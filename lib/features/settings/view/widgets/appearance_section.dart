@@ -20,7 +20,7 @@ class AppearanceSection extends ConsumerWidget {
           padding: const EdgeInsets.only(left: 8.0, bottom: 12),
           child: Text(
             'APPEARANCE',
-            style: AppTextStyles.label.copyWith(
+            style: AppTextStyles.label(context).copyWith(
               color: AppColors.textSecondary(context),
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -67,7 +67,7 @@ class AppearanceSection extends ConsumerWidget {
                     const SizedBox(width: 12),
                     Text(
                       'Dark Mode',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: AppColors.text(context),
@@ -97,7 +97,7 @@ class AppearanceSection extends ConsumerWidget {
                   children: [
                     Text(
                       'Accent Color',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
                         color: AppColors.text(context),

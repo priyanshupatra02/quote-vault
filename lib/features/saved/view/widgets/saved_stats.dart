@@ -28,7 +28,7 @@ class SavedStats extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 'CLOUD SYNCED',
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display(context).copyWith(
                   fontSize: 12, // text-xs
                   fontWeight: FontWeight.w600,
                   color: AppColors.primary,
@@ -42,7 +42,7 @@ class SavedStats extends StatelessWidget {
         // Stats Summary
         Text(
           '1,240',
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 36, // text-4xl
             fontWeight: FontWeight.bold,
             color: AppColors.text(context),
@@ -52,7 +52,7 @@ class SavedStats extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           'Quotes Saved',
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 14, // text-sm
             fontWeight: FontWeight.w500,
             color: AppColors.textSecondary(context), // slate-400 / #94a3b8

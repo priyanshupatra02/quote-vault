@@ -92,7 +92,7 @@ class ProfileStatCard extends StatelessWidget {
                 ),
                 child: Text(
                   badgeText,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                     color: Colors.teal.shade500,
@@ -104,7 +104,7 @@ class ProfileStatCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             value,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 24, // text-2xl
               fontWeight: FontWeight.bold,
               color: AppColors.text(context),
@@ -115,7 +115,7 @@ class ProfileStatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             label,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w500,
               color: AppColors.textSecondary(context),

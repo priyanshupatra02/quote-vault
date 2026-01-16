@@ -42,7 +42,7 @@ class QuoteShareCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     'QuoteVault',
-                    style: AppTextStyles.label.copyWith(
+                    style: AppTextStyles.label(context).copyWith(
                       color: Colors.white54,
                       fontSize: 14,
                       letterSpacing: 2.0,

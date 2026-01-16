@@ -21,7 +21,7 @@ class FontSizeSlider extends StatelessWidget {
           children: [
             Text(
               'SIZE',
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: AppColors.text(context).withOpacity(0.4),
@@ -30,7 +30,7 @@ class FontSizeSlider extends StatelessWidget {
             ),
             Text(
               '${value.toInt()}px',
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: AppColors.text(context).withOpacity(0.4),
@@ -44,7 +44,7 @@ class FontSizeSlider extends StatelessWidget {
           children: [
             Text(
               'A',
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textSecondary(context), // gray-500
@@ -72,7 +72,7 @@ class FontSizeSlider extends StatelessWidget {
             ),
             Text(
               'A',
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: const Color(0xFFD1D5DB), // gray-300

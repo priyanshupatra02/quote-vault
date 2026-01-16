@@ -101,7 +101,7 @@ class ProfileSection extends ConsumerWidget {
               children: [
                 Text(
                   name,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: AppColors.text(context),
@@ -117,7 +117,7 @@ class ProfileSection extends ConsumerWidget {
                   ),
                   child: Text(
                     'FREE', // Or check subscription status if available
-                    style: AppTextStyles.label.copyWith(
+                    style: AppTextStyles.label(context).copyWith(
                       fontSize: 10,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -129,7 +129,7 @@ class ProfileSection extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               email,
-              style: AppTextStyles.body.copyWith(
+              style: AppTextStyles.body(context).copyWith(
                 fontSize: 14,
                 color: AppColors.textSecondary(context),
               ),

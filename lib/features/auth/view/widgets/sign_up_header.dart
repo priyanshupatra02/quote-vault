@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 
@@ -40,8 +41,8 @@ class SignUpHeader extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         Text(
-          'QuoteVault',
-          style: AppTextStyles.serif.copyWith(
+          AppStrings.appName,
+          style: AppTextStyles.serif(context).copyWith(
             fontSize: 36,
             fontWeight: FontWeight.bold,
             color: AppColors.text(context),
@@ -51,9 +52,9 @@ class SignUpHeader extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Start collecting your wisdom today.',
+          AppStrings.signUpSubtitle,
           textAlign: TextAlign.center,
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 16,
             color: AppColors.text(context).withOpacity(0.6),
             height: 1.5,

@@ -24,7 +24,7 @@ class _TypographySectionState extends ConsumerState<TypographySection> {
           padding: const EdgeInsets.only(left: 8.0, bottom: 12),
           child: Text(
             'TYPOGRAPHY',
-            style: AppTextStyles.label.copyWith(
+            style: AppTextStyles.label(context).copyWith(
               color: AppColors.textSecondary(context),
               fontSize: 13,
               fontWeight: FontWeight.w600,
@@ -69,7 +69,7 @@ class _TypographySectionState extends ConsumerState<TypographySection> {
                     Text(
                       '"Simplicity is the ultimate sophistication."',
                       textAlign: TextAlign.center,
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 18 + (fontSize / 10), // Simple scaling logic
                         fontWeight: FontWeight.w500,
                         color: AppColors.text(context),
@@ -79,7 +79,7 @@ class _TypographySectionState extends ConsumerState<TypographySection> {
                     const SizedBox(height: 12),
                     Text(
                       'LEONARDO DA VINCI',
-                      style: AppTextStyles.label.copyWith(
+                      style: AppTextStyles.label(context).copyWith(
                         fontSize: 10 + (fontSize / 20),
                         color: AppColors.textSecondary(context),
                         fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _TypographySectionState extends ConsumerState<TypographySection> {
                 children: [
                   Text(
                     'FONT SIZE ADJUSTMENT',
-                    style: AppTextStyles.label.copyWith(
+                    style: AppTextStyles.label(context).copyWith(
                       color: AppColors.textSecondary(context),
                       fontSize: 12,
                       fontWeight: FontWeight.w600,

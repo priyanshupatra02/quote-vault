@@ -105,7 +105,7 @@ class CollectionCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: _getTextColor(context, isDark),
@@ -115,7 +115,7 @@ class CollectionCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '$count Quotes',
-                      style: AppTextStyles.display.copyWith(
+                      style: AppTextStyles.display(context).copyWith(
                         fontSize: 11,
                         fontWeight: FontWeight.w600,
                         color: _getSubTextColor(context, isDark),

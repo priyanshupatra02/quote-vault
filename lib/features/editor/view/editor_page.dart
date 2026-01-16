@@ -47,7 +47,7 @@ class _EditorPageState extends State<EditorPage> {
                   ),
                   Text(
                     'Edit Quote',
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.display(context).copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: AppColors.text(context),

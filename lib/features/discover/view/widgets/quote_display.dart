@@ -40,7 +40,7 @@ class QuoteDisplay extends ConsumerWidget {
             opacity: 0.1,
             child: Text(
               '"',
-              style: AppTextStyles.serif.copyWith(
+              style: AppTextStyles.serif(context).copyWith(
                 fontSize: 96 * scaleFactor, // text-8xl = 96px
                 color: textColor,
                 height: 0.8,
@@ -51,7 +51,7 @@ class QuoteDisplay extends ConsumerWidget {
           // Main Quote Text (38px serif font matching HTML)
           Text(
             quote,
-            style: AppTextStyles.serif.copyWith(
+            style: AppTextStyles.serif(context).copyWith(
               fontSize: 38 * scaleFactor,
               fontWeight: FontWeight.w500,
               color: textColor.withOpacity(0.9),
@@ -72,7 +72,7 @@ class QuoteDisplay extends ConsumerWidget {
               const SizedBox(width: 16),
               Text(
                 author,
-                style: AppTextStyles.sectionLabel.copyWith(
+                style: AppTextStyles.sectionLabel(context).copyWith(
                   color: authorColor,
                   letterSpacing: 2.0,
                 ),

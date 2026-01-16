@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 
@@ -16,8 +17,8 @@ class LoginHeader extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF6B18D8), // Deep purple
-                const Color(0xFF904BE6), // Lighter purple
+                Theme.of(context).primaryColor,
+                Theme.of(context).primaryColor.withOpacity(0.8),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -25,7 +26,7 @@ class LoginHeader extends StatelessWidget {
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF6B18D8).withOpacity(0.4),
+                color: Theme.of(context).primaryColor.withOpacity(0.4),
                 blurRadius: 16,
                 offset: const Offset(0, 8),
               ),
@@ -41,8 +42,8 @@ class LoginHeader extends StatelessWidget {
 
         // App Name
         Text(
-          'QuoteVault',
-          style: AppTextStyles.serif.copyWith(
+          AppStrings.appName,
+          style: AppTextStyles.serif(context).copyWith(
             fontSize: 32,
             fontWeight: FontWeight.bold,
             color: AppColors.text(context),
@@ -53,8 +54,8 @@ class LoginHeader extends StatelessWidget {
 
         // Tagline / Welcome Back
         Text(
-          'Welcome back! Continue your journey.',
-          style: AppTextStyles.body.copyWith(
+          AppStrings.loginSubtitle,
+          style: AppTextStyles.body(context).copyWith(
             fontSize: 16,
             color: AppColors.textSecondary(context),
           ),

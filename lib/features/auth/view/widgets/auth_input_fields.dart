@@ -16,7 +16,7 @@ class AuthLabel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8, left: 4),
       child: Text(
         label,
-        style: AppTextStyles.label.copyWith(
+        style: AppTextStyles.label(context).copyWith(
           color: AppColors.text(context).withOpacity(0.8),
           fontSize: 14,
         ),
@@ -69,10 +69,10 @@ class AuthTextField extends StatelessWidget {
         controller: controller,
         obscureText: obscureText,
         keyboardType: keyboardType,
-        style: AppTextStyles.body.copyWith(color: AppColors.text(context)),
+        style: AppTextStyles.body(context).copyWith(color: AppColors.text(context)),
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: AppTextStyles.body.copyWith(
+          hintStyle: AppTextStyles.body(context).copyWith(
             color: Colors.grey.shade400,
             fontSize: 14,
           ),

@@ -97,7 +97,7 @@ class _SocialButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label,
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display(context).copyWith(
                   fontWeight: FontWeight.w600,
                   fontSize: 14,
                   color: AppColors.text(context),

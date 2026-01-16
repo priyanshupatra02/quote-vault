@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
+import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/quotes/controller/pod/quotes_pod.dart'; // Make sure this path is correct
 
@@ -106,20 +107,28 @@ class _ExploreSearchBarState extends ConsumerState<ExploreSearchBar> {
         // Search Input
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFF8F9FA),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white.withOpacity(0.05)
+                : const Color(0xFFF8F9FA),
             borderRadius: BorderRadius.circular(16),
+            border: Theme.of(context).brightness == Brightness.dark
+                ? Border.all(color: Colors.white.withOpacity(0.1))
+                : null,
           ),
           child: TextField(
             controller: _controller,
             focusNode: _focusNode,
+            style: AppTextStyles.body(context).copyWith(
+              color: AppColors.text(context),
+            ),
             decoration: InputDecoration(
               hintText: 'Search keywords or authors...',
-              hintStyle: AppTextStyles.searchHint.copyWith(
-                color: Colors.grey.shade400,
+              hintStyle: AppTextStyles.searchHint(context).copyWith(
+                color: AppColors.textSecondary(context),
               ),
               prefixIcon: Icon(
                 Icons.search,
-                color: Colors.grey.shade400,
+                color: AppColors.textSecondary(context),
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -133,7 +142,7 @@ class _ExploreSearchBarState extends ConsumerState<ExploreSearchBar> {
           Container(
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.surface(context),
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
@@ -165,15 +174,15 @@ class _ExploreSearchBarState extends ConsumerState<ExploreSearchBar> {
                           Expanded(
                             child: Text(
                               suggestion,
-                              style: AppTextStyles.body.copyWith(
-                                color: const Color(0xFF1E293B),
+                              style: AppTextStyles.body(context).copyWith(
+                                color: AppColors.text(context),
                               ),
                             ),
                           ),
                           Icon(
                             Icons.north_west,
                             size: 14,
-                            color: Colors.grey.shade400,
+                            color: AppColors.textSecondary(context),
                           ),
                         ],
                       ),

@@ -61,7 +61,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                         // Title
                         Text(
                           'Reset link sent!',
-                          style: AppTextStyles.headline1.copyWith(
+                          style: AppTextStyles.headline1(context).copyWith(
                             fontSize: 30, // ~3xl
                             fontWeight: FontWeight.bold,
                             color: AppColors.text(context),
@@ -75,7 +75,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                         // Description
                         Text(
                           'Check your inbox for further instructions to create a new password.',
-                          style: AppTextStyles.body.copyWith(
+                          style: AppTextStyles.body(context).copyWith(
                             fontSize: 16,
                             color: AppColors.textSecondary(context),
                             height: 1.5,
@@ -119,7 +119,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                             ),
                             child: Text(
                               'Return to Login',
-                              style: AppTextStyles.buttonText.copyWith(
+                              style: AppTextStyles.buttonText(context).copyWith(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
@@ -144,7 +144,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                           ),
                           child: RichText(
                             text: TextSpan(
-                              style: AppTextStyles.body.copyWith(
+                              style: AppTextStyles.body(context).copyWith(
                                 fontSize: 14,
                                 color: AppColors.textSecondary(context),
                                 fontWeight: FontWeight.w500,
@@ -153,7 +153,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                                 const TextSpan(text: "Didn't receive an email? "),
                                 TextSpan(
                                   text: 'Resend',
-                                  style: AppTextStyles.body.copyWith(
+                                  style: AppTextStyles.body(context).copyWith(
                                     fontSize: 14,
                                     color: AppColors.text(context),
                                     fontWeight: FontWeight.bold,

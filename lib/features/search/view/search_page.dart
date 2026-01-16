@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/discover/view/widgets/background_layer.dart';
-import 'package:quote_vault/features/discover/view/widgets/custom_bottom_nav_bar.dart';
 import 'package:quote_vault/features/search/view/widgets/author_result_tile.dart';
 import 'package:quote_vault/features/search/view/widgets/quote_result_card.dart';
 import 'package:quote_vault/features/search/view/widgets/search_header.dart';
@@ -37,7 +36,7 @@ class SearchPage extends StatelessWidget {
                     children: [
                       Text(
                         'QUOTES',
-                        style: AppTextStyles.display.copyWith(
+                        style: AppTextStyles.display(context).copyWith(
                           fontSize: 12, // text-sm
                           fontWeight: FontWeight.w600,
                           color: Colors.grey.shade400,
@@ -46,7 +45,7 @@ class SearchPage extends StatelessWidget {
                       ),
                       Text(
                         '12 results',
-                        style: AppTextStyles.display.copyWith(
+                        style: AppTextStyles.display(context).copyWith(
                           fontSize: 12, // text-xs
                           fontWeight: FontWeight.w500,
                           color: AppColors.primary,
@@ -85,7 +84,7 @@ class SearchPage extends StatelessWidget {
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     'AUTHORS',
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.display(context).copyWith(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       color: Colors.grey.shade400,

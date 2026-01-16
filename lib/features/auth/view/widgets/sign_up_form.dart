@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
@@ -37,7 +38,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text(AppStrings.formErrorMissingFields)),
       );
       return;
     }
@@ -63,7 +64,7 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
           context.router.replace(const NavbarRoute());
         } else if (state is AuthErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign Up Failed: ${state.message}')),
+            SnackBar(content: Text('${AppStrings.signUpFailedPrefix}${state.message}')),
           );
         }
       });
@@ -77,26 +78,26 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const AuthLabel(label: 'Full Name'),
+        const AuthLabel(label: AppStrings.nameLabel),
         const SizedBox(height: 6),
         AuthTextField(
           controller: _nameController,
-          hintText: 'John Doe',
+          hintText: AppStrings.nameHint,
         ),
         const SizedBox(height: 16),
-        const AuthLabel(label: 'Email'),
+        const AuthLabel(label: AppStrings.emailLabel),
         const SizedBox(height: 6),
         AuthTextField(
           controller: _emailController,
-          hintText: 'hello@example.com',
+          hintText: AppStrings.emailHint,
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 16),
-        const AuthLabel(label: 'Password'),
+        const AuthLabel(label: AppStrings.passwordLabel),
         const SizedBox(height: 6),
         AuthTextField(
           controller: _passwordController,
-          hintText: 'Create a password',
+          hintText: AppStrings.createPasswordHint,
           obscureText: _obscurePassword,
           isPassword: true,
           onToggleVisibility: () {
@@ -119,8 +120,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
               visualDensity: VisualDensity.compact,
             ),
             child: Text(
-              'Forgot Password?',
-              style: AppTextStyles.display.copyWith(
+              AppStrings.forgotPassword,
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.grey.shade500,
@@ -147,8 +148,8 @@ class _SignUpFormState extends ConsumerState<SignUpForm> {
                   child: AppLoader(progressColor: Colors.white),
                 )
               : Text(
-                  'Create Account',
-                  style: AppTextStyles.display.copyWith(
+                  AppStrings.signUpButton,
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

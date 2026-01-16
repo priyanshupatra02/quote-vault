@@ -34,7 +34,7 @@ class SearchBarHeader extends StatelessWidget {
             children: [
               Text(
                 'Discover',
-                style: AppTextStyles.serif.copyWith(
+                style: AppTextStyles.serif(context).copyWith(
                   fontSize: 32,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
@@ -65,7 +65,7 @@ class SearchBarHeader extends StatelessWidget {
                           Expanded(
                             child: Text(
                               'Search keywords or authors...',
-                              style: AppTextStyles.display.copyWith(
+                              style: AppTextStyles.display(context).copyWith(
                                 color: Colors.white.withOpacity(0.4),
                                 fontSize: 14,
                               ),

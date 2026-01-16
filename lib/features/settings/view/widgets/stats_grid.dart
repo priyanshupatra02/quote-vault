@@ -105,7 +105,7 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 24),
           Text(
             value,
-            style: AppTextStyles.display.copyWith(
+            style: AppTextStyles.display(context).copyWith(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: AppColors.text(context),
@@ -115,7 +115,7 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             label,
-            style: AppTextStyles.body.copyWith(
+            style: AppTextStyles.body(context).copyWith(
               fontSize: 13,
               fontWeight: FontWeight.w600,
               color: AppColors.textSecondary(context),

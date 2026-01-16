@@ -22,7 +22,7 @@ class SettingsFooter extends StatelessWidget {
         const SizedBox(height: 16),
         Text(
           'QuoteVault v1.0.2',
-          style: AppTextStyles.label.copyWith(
+          style: AppTextStyles.label(context).copyWith(
             color: AppColors.textSecondary(context),
             fontSize: 12,
           ),
@@ -44,7 +44,7 @@ class _FooterButton extends StatelessWidget {
       onTap: onTap,
       child: Text(
         label,
-        style: AppTextStyles.display.copyWith(
+        style: AppTextStyles.display(context).copyWith(
           fontSize: 14,
           fontWeight: FontWeight.w500,
           color: AppColors.textSecondary(context), // Starts gray

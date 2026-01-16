@@ -53,11 +53,11 @@ class FilterTabsDelegate extends SliverPersistentHeaderDelegate {
                     child: Text(
                       filter.name[0].toUpperCase() + filter.name.substring(1),
                       style: isSelected
-                          ? AppTextStyles.navLabelActive.copyWith(
+                          ? AppTextStyles.navLabelActive(context).copyWith(
                               fontSize: 14,
                               color: isDark ? Colors.white : const Color(0xFF0F172A),
                             )
-                          : AppTextStyles.navLabelInactive.copyWith(
+                          : AppTextStyles.navLabelInactive(context).copyWith(
                               fontSize: 14,
                               color: isDark ? Colors.white38 : Colors.grey[500],
                             ),

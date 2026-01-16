@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
@@ -34,7 +35,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text(AppStrings.formErrorMissingFields)),
       );
       return;
     }
@@ -56,7 +57,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           context.router.replace(const NavbarRoute());
         } else if (state is AuthErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login Failed: ${state.message}')),
+            SnackBar(content: Text('${AppStrings.loginFailedPrefix}${state.message}')),
           );
         }
       });
@@ -70,17 +71,17 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AuthLabel(label: 'Email'),
+        const AuthLabel(label: AppStrings.emailLabel),
         AuthTextField(
           controller: _emailController,
-          hintText: 'hello@example.com',
+          hintText: AppStrings.emailHint,
           keyboardType: TextInputType.emailAddress,
         ),
         const SizedBox(height: 16),
-        const AuthLabel(label: 'Password'),
+        const AuthLabel(label: AppStrings.passwordLabel),
         AuthTextField(
           controller: _passwordController,
-          hintText: 'Enter your password',
+          hintText: AppStrings.passwordHint,
           obscureText: _obscurePassword,
           isPassword: true,
           onToggleVisibility: () {
@@ -100,8 +101,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 context.router.push(const ForgotPasswordRoute());
               },
               child: Text(
-                'Forgot Password?',
-                style: AppTextStyles.body.copyWith(
+                AppStrings.forgotPassword,
+                style: AppTextStyles.body(context).copyWith(
                   fontSize: 14,
                   color: AppColors.textSecondary(context),
                   fontWeight: FontWeight.w500,
@@ -132,8 +133,8 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                     child: AppLoader(progressColor: Colors.white),
                   )
                 : Text(
-                    'Log In',
-                    style: AppTextStyles.buttonText.copyWith(
+                    AppStrings.signInButton,
+                    style: AppTextStyles.buttonText(context).copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,

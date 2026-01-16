@@ -62,7 +62,7 @@ class ProfileHeader extends StatelessWidget {
           children: [
             Text(
               'Alex Sterling',
-              style: AppTextStyles.display.copyWith(
+              style: AppTextStyles.display(context).copyWith(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: AppColors.text(context),
@@ -79,7 +79,7 @@ class ProfileHeader extends StatelessWidget {
               ),
               child: Text(
                 'PRO',
-                style: AppTextStyles.display.copyWith(
+                style: AppTextStyles.display(context).copyWith(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -91,7 +91,7 @@ class ProfileHeader extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           'Member since 2023 • alex.sterling@example.com',
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 14,
             fontWeight: FontWeight.normal,
             color: AppColors.textSecondary(context), // #a69db8

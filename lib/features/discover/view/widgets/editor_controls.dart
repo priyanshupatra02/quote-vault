@@ -173,7 +173,7 @@ class EditorControls extends StatelessWidget {
   }
 
   TextStyle _labelStyle(BuildContext context) {
-    return AppTextStyles.sectionLabel.copyWith(
+    return AppTextStyles.sectionLabel(context).copyWith(
       color: AppColors.textSecondary(context),
     );
   }

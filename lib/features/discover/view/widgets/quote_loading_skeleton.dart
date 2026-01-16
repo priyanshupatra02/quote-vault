@@ -33,7 +33,7 @@ class QuoteLoadingSkeleton extends StatelessWidget {
                 opacity: 0.1,
                 child: Text(
                   '“',
-                  style: AppTextStyles.serif.copyWith(
+                  style: AppTextStyles.serif(context).copyWith(
                     fontSize: 60,
                     color: Colors.white,
                     height: 1,

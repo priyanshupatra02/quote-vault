@@ -55,7 +55,7 @@ class SearchHeader extends StatelessWidget {
                   const SizedBox(width: 4),
                   Text(
                     'Search Results',
-                    style: AppTextStyles.display.copyWith(
+                    style: AppTextStyles.display(context).copyWith(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,
@@ -88,7 +88,7 @@ class SearchHeader extends StatelessWidget {
                     Expanded(
                       child: Text(
                         'Wisdom', // Mock value "Wisdom"
-                        style: AppTextStyles.display.copyWith(
+                        style: AppTextStyles.display(context).copyWith(
                           color: Colors.white,
                           fontSize: 14,
                         ),

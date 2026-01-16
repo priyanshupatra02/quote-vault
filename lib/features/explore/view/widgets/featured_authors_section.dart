@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quote_vault/core/constants/app_strings.dart';
 import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
@@ -32,9 +33,9 @@ class FeaturedAuthorsSection extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'FEATURED AUTHORS',
-                  style: AppTextStyles.sectionLabel.copyWith(
-                    color: AppColors.kGrey500,
+                  AppStrings.authorsSectionTitle,
+                  style: AppTextStyles.sectionLabel(context).copyWith(
+                    color: AppColors.textSecondary(context),
                   ),
                 ),
                 TextButton(
@@ -43,7 +44,7 @@ class FeaturedAuthorsSection extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('All authors coming soon!'),
-                        duration: const Duration(seconds: 2),
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   },
@@ -53,8 +54,8 @@ class FeaturedAuthorsSection extends ConsumerWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),
                   child: Text(
-                    'View All',
-                    style: AppTextStyles.linkText.copyWith(
+                    AppStrings.viewAll,
+                    style: AppTextStyles.linkText(context).copyWith(
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
@@ -118,19 +119,27 @@ class AuthorAvatar extends StatelessWidget {
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey.shade100,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.white.withOpacity(0.05)
+                  : Colors.grey.shade100,
             ),
             child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade50),
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? const Color(0xFF2a2438)
+                    : Colors.white,
+                border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white.withOpacity(0.1)
+                      : Colors.grey.shade50,
+                ),
               ),
               child: Center(
                 child: Text(
                   initials,
-                  style: AppTextStyles.authorInitials.copyWith(
-                    color: const Color(0xFF1E293B),
+                  style: AppTextStyles.authorInitials(context).copyWith(
+                    color: AppColors.text(context).withOpacity(0.9),
                   ),
                 ),
               ),
@@ -142,8 +151,8 @@ class AuthorAvatar extends StatelessWidget {
           Text(
             name,
             textAlign: TextAlign.center,
-            style: AppTextStyles.authorName.copyWith(
-              color: const Color(0xFF334155),
+            style: AppTextStyles.authorName(context).copyWith(
+              color: AppColors.textSecondary(context),
             ),
           ),
         ],

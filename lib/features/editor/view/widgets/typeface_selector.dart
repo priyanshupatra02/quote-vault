@@ -28,7 +28,7 @@ class TypefaceSelector extends StatelessWidget {
       children: [
         Text(
           'TYPEFACE',
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 12,
             fontWeight: FontWeight.bold,
             color: AppColors.text(context).withOpacity(0.4),
@@ -90,7 +90,7 @@ class TypefaceSelector extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         font.name,
-                        style: AppTextStyles.display.copyWith(
+                        style: AppTextStyles.display(context).copyWith(
                           fontSize: 10,
                           color: isSelected
                               ? AppColors.primary

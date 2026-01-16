@@ -70,7 +70,7 @@ class _EditorToolbarItem extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           label,
-          style: AppTextStyles.display.copyWith(
+          style: AppTextStyles.display(context).copyWith(
             fontSize: 10,
             fontWeight: FontWeight.w500,
             color: isActive ? AppColors.primary : Colors.transparent, // Simulate opacity toggle

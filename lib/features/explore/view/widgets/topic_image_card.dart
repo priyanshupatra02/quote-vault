@@ -94,7 +94,7 @@ class TopicImageCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -104,7 +104,7 @@ class TopicImageCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: AppTextStyles.display.copyWith(
+                  style: AppTextStyles.display(context).copyWith(
                     fontSize: 12, // text-xs
                     fontWeight: FontWeight.w500,
                     color: Colors.white.withOpacity(0.8), // accent color light
