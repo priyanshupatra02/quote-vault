@@ -55,6 +55,7 @@ dev_dependencies:
   slang_build_runner: ^4.11.0
   spot: ^0.18.0
   very_good_analysis: ^10.0.0
+  icons_launcher: ^3.0.3
 
 
 
@@ -64,3 +65,11 @@ flutter:
   uses-material-design: true
   assets:
      - assets/icons/
+
+icons_launcher:
+  image_path: "/Users/priyanshupatra/Downloads/QuoteVault/Apple/App_store_1024_1x.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
