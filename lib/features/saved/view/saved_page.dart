@@ -248,8 +248,13 @@ class _SavedPageState extends ConsumerState<SavedPage> {
           // Content Grid
           SliverPadding(
             padding: const EdgeInsets.all(16),
-            sliver: _buildContent(
-                favoritesState, collectionsState, isDark, selectedFilter, searchQuery),
+            sliver: _VaultContent(
+              favoritesState: favoritesState,
+              collectionsState: collectionsState,
+              isDark: isDark,
+              selectedFilter: selectedFilter,
+              searchQuery: searchQuery,
+            ),
           ),
 
           // Bottom padding
@@ -266,30 +271,64 @@ class _SavedPageState extends ConsumerState<SavedPage> {
       ),
     );
   }
+}
 
-  Widget _buildContent(
-    AsyncValue<FavoritesState> favoritesState,
-    AsyncValue<CollectionsState> collectionsState,
-    bool isDark,
-    VaultFilter selectedFilter,
-    String searchQuery,
-  ) {
+class _VaultContent extends StatelessWidget {
+  const _VaultContent({
+    required this.favoritesState,
+    required this.collectionsState,
+    required this.isDark,
+    required this.selectedFilter,
+    required this.searchQuery,
+  });
+
+  final AsyncValue<FavoritesState> favoritesState;
+  final AsyncValue<CollectionsState> collectionsState;
+  final bool isDark;
+  final VaultFilter selectedFilter;
+  final String searchQuery;
+
+  @override
+  Widget build(BuildContext context) {
     switch (selectedFilter) {
       case VaultFilter.all:
-        return _buildMasonryGrid(favoritesState, collectionsState, isDark, searchQuery);
+        return _VaultMasonryGrid(
+          favoritesState: favoritesState,
+          collectionsState: collectionsState,
+          isDark: isDark,
+          searchQuery: searchQuery,
+        );
       case VaultFilter.favorites:
-        return _buildFavoritesList(favoritesState, isDark, searchQuery);
+        return _VaultFavoritesList(
+          favoritesState: favoritesState,
+          isDark: isDark,
+          searchQuery: searchQuery,
+        );
       case VaultFilter.collections:
-        return _buildCollectionsList(collectionsState, isDark, searchQuery);
+        return _VaultCollectionsList(
+          collectionsState: collectionsState,
+          isDark: isDark,
+          searchQuery: searchQuery,
+        );
     }
   }
+}
 
-  Widget _buildMasonryGrid(
-    AsyncValue<FavoritesState> favoritesState,
-    AsyncValue<CollectionsState> collectionsState,
-    bool isDark,
-    String searchQuery,
-  ) {
+class _VaultMasonryGrid extends StatelessWidget {
+  const _VaultMasonryGrid({
+    required this.favoritesState,
+    required this.collectionsState,
+    required this.isDark,
+    required this.searchQuery,
+  });
+
+  final AsyncValue<FavoritesState> favoritesState;
+  final AsyncValue<CollectionsState> collectionsState;
+  final bool isDark;
+  final String searchQuery;
+
+  @override
+  Widget build(BuildContext context) {
     List<Widget> items = [];
 
     // Add favorites
@@ -340,9 +379,21 @@ class _SavedPageState extends ConsumerState<SavedPage> {
       itemBuilder: (context, index) => items[index],
     );
   }
+}
 
-  Widget _buildFavoritesList(
-      AsyncValue<FavoritesState> favoritesState, bool isDark, String searchQuery) {
+class _VaultFavoritesList extends StatelessWidget {
+  const _VaultFavoritesList({
+    required this.favoritesState,
+    required this.isDark,
+    required this.searchQuery,
+  });
+
+  final AsyncValue<FavoritesState> favoritesState;
+  final bool isDark;
+  final String searchQuery;
+
+  @override
+  Widget build(BuildContext context) {
     return favoritesState.easyWhen(
       data: (state) {
         if (state is FavoritesLoadedState && state.favorites.isNotEmpty) {
@@ -377,9 +428,21 @@ class _SavedPageState extends ConsumerState<SavedPage> {
       ),
     );
   }
+}
 
-  Widget _buildCollectionsList(
-      AsyncValue<CollectionsState> collectionsState, bool isDark, String searchQuery) {
+class _VaultCollectionsList extends StatelessWidget {
+  const _VaultCollectionsList({
+    required this.collectionsState,
+    required this.isDark,
+    required this.searchQuery,
+  });
+
+  final AsyncValue<CollectionsState> collectionsState;
+  final bool isDark;
+  final String searchQuery;
+
+  @override
+  Widget build(BuildContext context) {
     return collectionsState.easyWhen(
       data: (state) {
         if (state is CollectionsLoadedState && state.collections.isNotEmpty) {

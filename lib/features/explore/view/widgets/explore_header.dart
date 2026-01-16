@@ -11,22 +11,24 @@ class ExploreHeader extends StatelessWidget {
       child: Container(
         color: Colors.white.withOpacity(0.95),
         padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Title
-            Text(
-              'Explore',
-              style: AppTextStyles.pageTitle.copyWith(
-                color: const Color(0xFF0F172A),
-                letterSpacing: 0.6,
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title
+              Text(
+                'Explore',
+                style: AppTextStyles.pageTitle.copyWith(
+                  color: const Color(0xFF0F172A),
+                  letterSpacing: 0.6,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            // Search Bar
-            const ExploreSearchBar(),
-          ],
+              // Search Bar
+              const ExploreSearchBar(),
+            ],
+          ),
         ),
       ),
     );

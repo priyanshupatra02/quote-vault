@@ -29,22 +29,20 @@ class ExplorePage extends ConsumerWidget {
           // ),
 
           // Main Content
-          SafeArea(
-            child: CustomScrollView(
-              slivers: [
-                // Sticky Header with Title + Search
-                const ExploreHeader(),
+          CustomScrollView(
+            slivers: [
+              // Sticky Header with Title + Search
+              const ExploreHeader(),
 
-                // Featured Authors Section
-                const FeaturedAuthorsSection(),
+              // Featured Authors Section
+              const FeaturedAuthorsSection(),
 
-                // Categories Section
-                const CategoriesSection(),
+              // Categories Section
+              const CategoriesSection(),
 
-                // Bottom padding for navbar
-                const SliverToBoxAdapter(child: SizedBox(height: 100)),
-              ],
-            ),
+              // Bottom padding for navbar
+              const SliverToBoxAdapter(child: SizedBox(height: 100)),
+            ],
           ),
         ],
       ),

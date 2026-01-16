@@ -57,10 +57,10 @@ class _AnimatedMeshGradientState extends State<AnimatedMeshGradient>
         isDark ? primary.withOpacity(0.3) : primary.withOpacity(0.15); // Top-left accent
 
     final Color c2 = isDark
-        ? const Color(0xFF2c0b6e).withOpacity(0.4)
+        ? const Color.fromARGB(255, 205, 180, 254).withOpacity(0.4)
         : AppColors.lavenderSoft; // Secondary accent
 
-    final Color c3 = isDark ? Colors.black.withOpacity(0.1) : Colors.white; // Base
+    final Color c3 = isDark ? AppColors.kGrey100.withOpacity(0.1) : Colors.white; // Base
 
     // Calculating dynamic color inside build to respond to theme changes
     // Interpolating between primary and gold/muted tones for a premium feel
