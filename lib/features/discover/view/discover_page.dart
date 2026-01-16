@@ -72,7 +72,11 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
                 // Quote Area
                 Expanded(
                   child: quotesState.easyWhen(
-                    data: (state) => _buildQuotesContent(state, currentIndex),
+                    data: (state) => _QuotesContent(
+                      state: state,
+                      currentIndex: currentIndex,
+                      pageController: _pageController,
+                    ),
                     onRetry: () => ref.read(quotesProvider.notifier).refresh(),
                     includedefaultDioErrorMessage: true,
                   ),
@@ -94,47 +98,37 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
       ),
     );
   }
+}
 
-  Widget _buildQuotesContent(QuotesState state, int currentIndex) {
+/// Widget to display quotes content based on state
+class _QuotesContent extends ConsumerWidget {
+  const _QuotesContent({
+    required this.state,
+    required this.currentIndex,
+    required this.pageController,
+  });
+
+  final QuotesState state;
+  final int currentIndex;
+  final PageController pageController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     if (state is QuotesLoadingState) {
       return const Center(child: AppLoader());
     }
 
     if (state is QuotesEmptyState) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.format_quote, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(
-              state.message,
-              style: const TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-          ],
-        ),
-      );
+      return _EmptyQuotesView(message: (state as QuotesEmptyState).message);
     }
 
     if (state is QuotesErrorState) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(state.message, style: const TextStyle(color: Colors.red)),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () => ref.read(quotesProvider.notifier).refresh(),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      );
+      return _ErrorQuotesView(message: (state as QuotesErrorState).message);
     }
 
     if (state is QuotesLoadedState || state is QuotesLoadingMoreState) {
       final quotes = state is QuotesLoadedState
-          ? state.quotes
+          ? (state as QuotesLoadedState).quotes
           : (state as QuotesLoadingMoreState).currentQuotes;
 
       if (quotes.isEmpty) {
@@ -146,34 +140,104 @@ class _DiscoverPageState extends ConsumerState<DiscoverPage> {
         );
       }
 
-      return RefreshIndicator(
-        onRefresh: () => ref.read(quotesProvider.notifier).refresh(),
-        child: PageView.builder(
-          controller: _pageController,
-          scrollDirection: Axis.vertical,
-          itemCount: quotes.length,
-          onPageChanged: (index) {
-            ref.read(currentQuoteIndexProvider.notifier).state = index;
-
-            // Load more when reaching near the end
-            if (state is QuotesLoadedState && state.hasMore && index >= quotes.length - 3) {
-              ref.read(quotesProvider.notifier).loadMore();
-            }
-          },
-          itemBuilder: (context, index) {
-            final quote = quotes[index];
-            return Center(
-              child: QuoteDisplay(
-                quote: quote.content,
-                author: quote.author.toUpperCase(),
-              ),
-            );
-          },
-        ),
+      return _QuotesPageView(
+        quotes: quotes,
+        pageController: pageController,
+        hasMore: state is QuotesLoadedState ? (state as QuotesLoadedState).hasMore : false,
       );
     }
 
     // Fallback for initial state
-    return const Center(child: CircularProgressIndicator());
+    return const Center(child: AppLoader());
+  }
+}
+
+/// Empty state view widget
+class _EmptyQuotesView extends StatelessWidget {
+  const _EmptyQuotesView({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.format_quote, size: 64, color: Colors.grey),
+          const SizedBox(height: 16),
+          Text(
+            message,
+            style: const TextStyle(color: Colors.grey, fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Error state view widget
+class _ErrorQuotesView extends ConsumerWidget {
+  const _ErrorQuotesView({required this.message});
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(message, style: const TextStyle(color: Colors.red)),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () => ref.read(quotesProvider.notifier).refresh(),
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// PageView widget for displaying quotes
+class _QuotesPageView extends ConsumerWidget {
+  const _QuotesPageView({
+    required this.quotes,
+    required this.pageController,
+    required this.hasMore,
+  });
+
+  final List<QuoteModel> quotes;
+  final PageController pageController;
+  final bool hasMore;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return RefreshIndicator(
+      onRefresh: () => ref.read(quotesProvider.notifier).refresh(),
+      child: PageView.builder(
+        controller: pageController,
+        scrollDirection: Axis.vertical,
+        itemCount: quotes.length,
+        onPageChanged: (index) {
+          ref.read(currentQuoteIndexProvider.notifier).state = index;
+
+          // Load more when reaching near the end
+          if (hasMore && index >= quotes.length - 3) {
+            ref.read(quotesProvider.notifier).loadMore();
+          }
+        },
+        itemBuilder: (context, index) {
+          final quote = quotes[index];
+          return Center(
+            child: QuoteDisplay(
+              quote: quote.content,
+              author: quote.author.toUpperCase(),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
