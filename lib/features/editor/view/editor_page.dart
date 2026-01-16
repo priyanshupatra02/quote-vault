@@ -57,10 +57,10 @@ class _EditorPageState extends State<EditorPage> {
                   ElevatedButton(
                     onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
                       elevation: 0,
-                      shadowColor: AppColors.primary.withOpacity(0.4),
+                      shadowColor: Theme.of(context).primaryColor.withOpacity(0.4),
                       shape: const StadiumBorder(),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                     ),

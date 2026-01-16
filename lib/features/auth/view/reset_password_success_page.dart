@@ -34,14 +34,14 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                           height: 112,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.primary.withOpacity(isDark ? 0.1 : 0.2),
+                            color: Theme.of(context).primaryColor.withOpacity(isDark ? 0.1 : 0.2),
                             border: Border.all(
-                              color: AppColors.primary.withOpacity(0.2),
+                              color: Theme.of(context).primaryColor.withOpacity(0.2),
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: AppColors.primary.withOpacity(0.3),
+                                color: Theme.of(context).primaryColor.withOpacity(0.3),
                                 blurRadius: 40,
                                 spreadRadius: -10,
                                 offset: const Offset(0, 0),
@@ -52,7 +52,7 @@ class ResetPasswordSuccessPage extends StatelessWidget {
                             child: Icon(
                               Icons.check,
                               size: 64,
-                              color: AppColors.primary,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),

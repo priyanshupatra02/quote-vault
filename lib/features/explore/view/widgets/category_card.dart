@@ -1,155 +1,83 @@
 import 'package:flutter/material.dart';
+import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/core/theme/text_styles.dart';
+import 'package:quote_vault/data/model/category_model.dart';
+
+/// Style configuration for category cards
+class CategoryStyle {
+  const CategoryStyle({
+    required this.icon,
+    required this.bgColor,
+    required this.iconBgColor,
+    required this.iconColor,
+  });
+
+  final IconData icon;
+  final Color bgColor;
+  final Color iconBgColor;
+  final Color iconColor;
+}
 
 class CategoryCard extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Color accentColor;
-  final bool isWide; // To handle the "Humor" card being full width
-
   const CategoryCard({
     super.key,
-    required this.title,
-    required this.subtitle,
-    required this.icon,
-    required this.accentColor,
-    this.isWide = false,
+    required this.category,
+    required this.style,
+    required this.onTap,
   });
+
+  final CategoryModel? category;
+  final CategoryStyle style;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          begin: Alignment(0.4, -0.8), // 145deg roughly
-          end: Alignment(-0.4, 0.8),
-          colors: [
-            Color.fromRGBO(255, 255, 255, 0.05),
-            Color.fromRGBO(255, 255, 255, 0.01),
-          ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 144,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: style.bgColor,
+          borderRadius: BorderRadius.circular(24),
         ),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.1),
-        ),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            // Blob
-            Positioned(
-              right: -24,
-              top: -24,
-              child: Container(
-                width: 96,
-                height: 96,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: accentColor.withOpacity(0.2),
-                ),
-                child: Container(// Blur
-                    // Note: In Flutter, BackdropFilter applies to what's BELOW it.
-                    // for a glowing blob, usually ImageFilter.blur on the container itself isn't direct.
-                    // We can use MaskFilter (outside) or stack a blur.
-                    // Simplified approach: Just low opacity color, maybe add ImageFilter.blur
-                    ),
+            // Icon
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: style.iconBgColor,
+              ),
+              child: Icon(
+                style.icon,
+                color: style.iconColor,
+                size: 20,
               ),
             ),
-            // Wide Card Gradient Overlay
-            if (isWide)
-              Positioned(
-                top: 0,
-                bottom: 0,
-                right: 0,
-                width: 128,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerRight,
-                      end: Alignment.centerLeft,
-                      colors: [
-                        accentColor.withOpacity(0.1),
-                        Colors.transparent,
-                      ],
-                    ),
+
+            // Text
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  category?.name ?? 'Category',
+                  style: AppTextStyles.categoryTitle.copyWith(
+                    color: const Color(0xFF0F172A),
                   ),
                 ),
-              ),
-
-            // Content
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: isWide
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            _CategoryIcon(
-                              icon: icon,
-                              accentColor: accentColor,
-                              isWide: isWide,
-                            ),
-                            const SizedBox(width: 16),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _CategoryTitle(
-                                  title: title,
-                                  isWide: isWide,
-                                ),
-                                const SizedBox(height: 2),
-                                _CategorySubtitle(
-                                  subtitle: subtitle,
-                                  isWide: isWide,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: 32,
-                          height: 32,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white.withOpacity(0.1)),
-                          ),
-                          child: Icon(
-                            Icons.arrow_forward_ios,
-                            size: 14,
-                            color: Colors.white.withOpacity(0.4),
-                          ),
-                        )
-                      ],
-                    )
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _CategoryIcon(
-                          icon: icon,
-                          accentColor: accentColor,
-                          isWide: isWide,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _CategoryTitle(
-                              title: title,
-                              isWide: isWide,
-                            ),
-                            const SizedBox(height: 2),
-                            _CategorySubtitle(
-                              subtitle: subtitle,
-                              isWide: isWide,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                const SizedBox(height: 2),
+                Text(
+                  'Explore quotes',
+                  style: AppTextStyles.subDetail.copyWith(
+                    color: const Color(0xFF475569),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -158,77 +86,80 @@ class CategoryCard extends StatelessWidget {
   }
 }
 
-class _CategoryIcon extends StatelessWidget {
-  final IconData icon;
-  final Color accentColor;
-  final bool isWide;
-
-  const _CategoryIcon({
-    required this.icon,
-    required this.accentColor,
-    required this.isWide,
+class WideCategoryCard extends StatelessWidget {
+  const WideCategoryCard({
+    super.key,
+    required this.category,
+    required this.style,
+    required this.onTap,
   });
+
+  final CategoryModel category;
+  final CategoryStyle style;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: isWide ? 48 : 40,
-      height: isWide ? 48 : 40,
-      decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white.withOpacity(0.05),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 112,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          color: style.bgColor,
+          borderRadius: BorderRadius.circular(24),
         ),
-      ),
-      child: Center(
-        child: Icon(
-          icon,
-          color: accentColor.withOpacity(0.8), // approximate color-300
-          size: isWide ? 24 : 20,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Left content
+            Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: style.iconBgColor,
+                  ),
+                  child: Icon(
+                    style.icon,
+                    color: style.iconColor,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      category.name,
+                      style: AppTextStyles.categoryTitleLarge.copyWith(
+                        color: const Color(0xFF0F172A),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    // You might want to add subtitle here if needed, or keep it minimal
+                  ],
+                ),
+              ],
+            ),
+            // Right Arrow
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: AppColors.text(context).withOpacity(0.5),
+              ),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class _CategoryTitle extends StatelessWidget {
-  final String title;
-  final bool isWide;
-
-  const _CategoryTitle({
-    required this.title,
-    required this.isWide,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: AppTextStyles.serif.copyWith(
-        fontSize: isWide ? 20 : 18,
-        color: Colors.white,
-      ),
-    );
-  }
-}
-
-class _CategorySubtitle extends StatelessWidget {
-  final String subtitle;
-  final bool isWide;
-
-  const _CategorySubtitle({
-    required this.subtitle,
-    required this.isWide,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      subtitle,
-      style: AppTextStyles.display.copyWith(
-        fontSize: isWide ? 11 : 10,
-        color: Colors.white.withOpacity(0.5),
       ),
     );
   }

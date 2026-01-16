@@ -2,11 +2,10 @@ import 'dart:ui' as ui;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:quote_vault/core/router/router.gr.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
-import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/auth/view/widgets/sign_up_form.dart';
 import 'package:quote_vault/features/auth/view/widgets/sign_up_header.dart';
+import 'package:quote_vault/features/auth/view/widgets/signup_login_link.dart';
 import 'package:quote_vault/features/auth/view/widgets/social_auth_buttons.dart';
 
 @RoutePage()
@@ -78,7 +77,7 @@ class SignUpPage extends StatelessWidget {
                       const SizedBox(height: 32),
                       const SocialAuthButtons(),
                       const SizedBox(height: 32),
-                      const _LoginLink(),
+                      const SignupLoginLink(),
                     ],
                   ),
                 ),
@@ -87,39 +86,6 @@ class SignUpPage extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _LoginLink extends StatelessWidget {
-  const _LoginLink();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Already a member? ',
-          style: AppTextStyles.display.copyWith(
-            color: Colors.grey.shade500,
-            fontSize: 14,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {
-            context.router.replace(const LoginRoute());
-          },
-          child: Text(
-            'Log In',
-            style: AppTextStyles.display.copyWith(
-              color: AppColors.primary,
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
