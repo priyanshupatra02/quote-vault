@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quote_vault/data/model/quote_model.dart';
@@ -8,6 +9,7 @@ import 'package:quote_vault/features/quotes/controller/state/quotes_states.dart'
 /// Quotes notifier for fetching and managing quotes from Supabase
 class QuotesNotifier extends AutoDisposeAsyncNotifier<QuotesState> {
   static const int _pageSize = 20;
+  int _baseOffset = 0;
 
   @override
   FutureOr<QuotesState> build() async {
@@ -26,6 +28,7 @@ class QuotesNotifier extends AutoDisposeAsyncNotifier<QuotesState> {
           pageSize: _pageSize,
           categoryId: categoryId,
           searchQuery: searchQuery,
+          offset: _baseOffset,
         );
 
     return result.when(
@@ -46,6 +49,23 @@ class QuotesNotifier extends AutoDisposeAsyncNotifier<QuotesState> {
   /// Refresh quotes (pull to refresh)
   Future<void> refresh() async {
     state = const AsyncData(QuotesLoadingState());
+
+    // Get total count to determine random range
+    final countResult = await ref.read(supabaseHelperProvider).getQuotesCount();
+
+    countResult.when(
+      (count) {
+        if (count > _pageSize) {
+          // Calculate random offset, ensuring we don't go out of bounds
+          // Max valid offset is count - pageSize
+          _baseOffset = Random().nextInt(count - _pageSize);
+        } else {
+          _baseOffset = 0;
+        }
+      },
+      (error) => _baseOffset = 0, // Fallback to 0 if count fails
+    );
+
     state = AsyncData(await _loadQuotes(page: 0));
   }
 
@@ -61,6 +81,7 @@ class QuotesNotifier extends AutoDisposeAsyncNotifier<QuotesState> {
     final result = await ref.read(supabaseHelperProvider).getQuotes(
           page: currentState.currentPage + 1,
           pageSize: _pageSize,
+          offset: _baseOffset,
         );
 
     state = AsyncData(result.when(

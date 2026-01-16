@@ -158,12 +158,26 @@ class SupabaseHelper {
 
   // ============ QUOTE METHODS ============
 
+  /// Get total quotes count
+  Future<Result<int, APIException>> getQuotesCount() async {
+    try {
+      final count = await client.from('quotes').count(CountOption.exact);
+
+      return Success(count);
+    } on PostgrestException catch (e) {
+      return Error(APIException(errorMessage: e.message));
+    } catch (e) {
+      return Error(APIException(errorMessage: e.toString()));
+    }
+  }
+
   /// Get quotes with pagination
   Future<Result<List<QuoteModel>, APIException>> getQuotes({
     int page = 0,
     int pageSize = 20,
     int? categoryId,
     String? searchQuery,
+    int offset = 0,
   }) async {
     try {
       var query = client.from('quotes').select('*, categories(*)');
@@ -176,9 +190,9 @@ class SupabaseHelper {
         query = query.or('content.ilike.%$searchQuery%,author.ilike.%$searchQuery%');
       }
 
-      final response = await query
-          .order('created_at', ascending: false)
-          .range(page * pageSize, (page + 1) * pageSize - 1);
+      final start = offset + (page * pageSize);
+      final response =
+          await query.order('created_at', ascending: false).range(start, start + pageSize - 1);
 
       final quotes = (response as List).map((e) => QuoteModel.fromMap(e)).toList();
 

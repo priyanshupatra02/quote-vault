@@ -57,4 +57,17 @@ class AppColors {
       Theme.of(context).brightness == Brightness.dark
           ? primary.withOpacity(0.1)
           : lavenderSoft.withOpacity(0.6);
+
+  // ============== GREY COLORS ==============
+  static const Color kGrey = Color(0xFF9E9E9E);
+  static const Color kMutedGrey = Color(0xFF78909C);
+  static const Color kGrey100 = Color(0xFFF5F5F5);
+  static const Color kGrey200 = Color(0xFFEEEEEE);
+  static const Color kGrey300 = Color(0xFFE0E0E0);
+  static const Color kGrey400 = Color(0xFFBDBDBD);
+  static const Color kGrey500 = Color(0xFF9E9E9E);
+  static const Color kGrey600 = Color(0xFF757575);
+  static const Color kGrey700 = Color(0xFF616161);
+  static const Color kGrey800 = Color(0xFF424242);
+  static const Color kGrey900 = Color(0xFF212121);
 }

@@ -28,6 +28,7 @@ dependencies:
   hive_ce_flutter: ^2.3.4
   internet_connection_checker_plus: ^2.9.1+2
   intl: ^0.20.2
+  loading_animation_widget: ^1.3.0
   multiple_result: ^5.2.0
   path_provider: ^2.1.5
   platform_info: ^5.0.0
