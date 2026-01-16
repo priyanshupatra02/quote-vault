@@ -1,21 +1,21 @@
-import 'package:quote_vault/shared/riverpod_ext/riverpod_observer/riverpod_obs.dart';
-import 'package:quote_vault/shared/riverpod_ext/riverpod_observer/talker_riverpod_settings.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
-import 'package:quote_vault/i18n/strings.g.dart';
-import 'package:quote_vault/shared/pods/internet_checker_pod.dart';
-import 'package:quote_vault/shared/pods/translation_pod.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:quote_vault/bootstrap.dart';
 import 'package:quote_vault/core/local_storage/app_storage_pod.dart';
 import 'package:quote_vault/features/splash/controller/box_encryption_key_pod.dart';
+import 'package:quote_vault/i18n/strings.g.dart';
 import 'package:quote_vault/init.dart';
+import 'package:quote_vault/shared/pods/internet_checker_pod.dart';
+import 'package:quote_vault/shared/pods/translation_pod.dart';
+import 'package:quote_vault/shared/riverpod_ext/riverpod_observer/riverpod_obs.dart';
+import 'package:quote_vault/shared/riverpod_ext/riverpod_observer/talker_riverpod_settings.dart';
 
 final futureInitializerPod = FutureProvider.autoDispose<ProviderContainer>((
   ref,
 ) async {
   ///Additional intial delay duration for app
-  // await Future.delayed(const Duration(seconds: 1));
+  await Future.delayed(const Duration(seconds: 2));
   await (init());
   await Hive.initFlutter();
 

@@ -6,7 +6,6 @@ import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/features/auth/view/widgets/sign_up_form.dart';
 import 'package:quote_vault/features/auth/view/widgets/sign_up_header.dart';
 import 'package:quote_vault/features/auth/view/widgets/signup_login_link.dart';
-import 'package:quote_vault/features/auth/view/widgets/social_auth_buttons.dart';
 
 @RoutePage()
 class SignUpPage extends StatelessWidget {
@@ -74,8 +73,6 @@ class SignUpPage extends StatelessWidget {
                       const SignUpHeader(),
                       const SizedBox(height: 32),
                       const SignUpForm(),
-                      const SizedBox(height: 32),
-                      const SocialAuthButtons(),
                       const SizedBox(height: 32),
                       const SignupLoginLink(),
                     ],

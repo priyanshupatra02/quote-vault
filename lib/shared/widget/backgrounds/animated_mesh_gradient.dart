@@ -4,7 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 
 class AnimatedMeshGradient extends StatefulWidget {
-  const AnimatedMeshGradient({super.key});
+  final Color? color1;
+  final Color? color2;
+  final Color? color3;
+  final Color? color4;
+
+  const AnimatedMeshGradient({
+    super.key,
+    this.color1,
+    this.color2,
+    this.color3,
+    this.color4,
+  });
 
   @override
   State<AnimatedMeshGradient> createState() => _AnimatedMeshGradientState();
@@ -54,25 +65,33 @@ class _AnimatedMeshGradientState extends State<AnimatedMeshGradient>
 
     // Define palette
     // Define palette
-    final Color c1 = isDark
-        ? const Color(0xFF4C1D95).withOpacity(0.8) // Deep Purple (richer)
-        : primary.withOpacity(0.15);
+    final Color c1 = widget.color1 ??
+        (isDark
+            ? const Color(0xFF4C1D95).withOpacity(0.8) // Deep Purple (richer)
+            : primary.withOpacity(0.15));
 
-    final Color c2 = isDark
-        ? const Color(0xFF7C3AED).withOpacity(0.6) // Vibrant Violet
-        : AppColors.lavenderSoft;
+    final Color c2 = widget.color2 ??
+        (isDark
+            ? const Color(0xFF7C3AED).withOpacity(0.6) // Vibrant Violet
+            : AppColors.lavenderSoft);
 
-    final Color c3 = isDark
-        ? const Color(0xFF0F172A) // Dark Navy/Black base
-        : Colors.white;
+    final Color c3 = widget.color3 ??
+        (isDark
+            ? const Color(0xFF0F172A) // Dark Navy/Black base
+            : Colors.white);
 
     // Calculating dynamic color inside build to respond to theme changes
     // Interpolating between primary and gold/muted tones for a premium feel
-    final dynamicColor = Color.lerp(
-            primary.withOpacity(isDark ? 0.4 : 0.2),
-            isDark ? const Color(0xFFC084FC).withOpacity(0.3) : AppColors.primary.withOpacity(0.4),
-            _colorShift.value) ??
-        primary;
+    // Calculating dynamic color inside build to respond to theme changes
+    // Interpolating between primary and gold/muted tones for a premium feel
+    final dynamicColor = widget.color4 ??
+        (Color.lerp(
+                primary.withOpacity(isDark ? 0.4 : 0.2),
+                isDark
+                    ? const Color(0xFFC084FC).withOpacity(0.3)
+                    : AppColors.primary.withOpacity(0.4),
+                _colorShift.value) ??
+            primary);
 
     return AnimatedBuilder(
       animation: _controller,

@@ -65,6 +65,7 @@ flutter:
   uses-material-design: true
   assets:
      - assets/icons/
+     - assets/images/
 
 icons_launcher:
   image_path: "/Users/priyanshupatra/Downloads/QuoteVault/Apple/App_store_1024_1x.png"

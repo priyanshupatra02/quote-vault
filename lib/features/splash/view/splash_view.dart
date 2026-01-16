@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:quote_vault/bootstrap.dart';
+import 'package:quote_vault/core/theme/app_colors.dart';
+import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/features/splash/controller/future_initializer.dart';
 import 'package:quote_vault/shared/riverpod_ext/asynvalue_easy_when.dart';
+import 'package:quote_vault/shared/widget/backgrounds/animated_mesh_gradient.dart';
 import 'package:quote_vault/shared/widget/custom_loaders/app_loader.dart';
 
 ///This view displayed for initializing all the required things on initialization.
@@ -96,13 +100,39 @@ class LoaderChild extends StatefulWidget {
 
 class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 2),
+    duration: const Duration(milliseconds: 2000),
     vsync: this,
-  )..repeat(reverse: true);
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.elasticOut,
   );
+
+  late final Animation<double> _scaleAnimation = CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(0.0, 0.6, curve: Curves.easeOutBack),
+  );
+
+  late final Animation<double> _fadeAnimation = CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(0.0, 0.4, curve: Curves.easeIn),
+  );
+
+  late final Animation<double> _textFadeAnimation = CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(0.4, 0.8, curve: Curves.easeIn),
+  );
+
+  late final Animation<Offset> _textSlideAnimation = Tween<Offset>(
+    begin: const Offset(0, 0.2),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(
+    parent: _controller,
+    curve: const Interval(0.4, 0.8, curve: Curves.easeOut),
+  ));
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.forward();
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -111,38 +141,103 @@ class _LoaderChildState extends State<LoaderChild> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Container(
-        color: Colors.white,
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            Center(
-              child: RotationTransition(
-                turns: _animation,
-                child: const FlutterLogo(
-                  size: 100,
+    return Scaffold(
+      backgroundColor: AppColors.background(context),
+      body: Stack(
+        children: [
+          // Background Gradient
+          AnimatedMeshGradient(
+            color1: AppColors.primary.withOpacity(0.05),
+            color2: Colors.white,
+            color3: AppColors.primary.withOpacity(0.08),
+            color4: Colors.white,
+          ),
+
+          // Main Content
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Logo Animation
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: Container(
+                      width: 120, // 30 * 4
+                      height: 120,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColors.primary.withOpacity(0.3),
+                            blurRadius: 20,
+                            offset: const Offset(0, 10),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Image.asset(
+                          'assets/images/app_logo.png',
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const Positioned(
-              bottom: 44,
-              child: AppLoader(
-                progressColor: Colors.amber,
-              ),
-            ),
-            const Positioned(
-              bottom: 16,
-              child: Material(
-                  child: Text(
-                "Welcome to Riverpod Simple Architecture App",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                const SizedBox(height: 24),
+
+                // Text Animation
+                FadeTransition(
+                  opacity: _textFadeAnimation,
+                  child: SlideTransition(
+                    position: _textSlideAnimation,
+                    child: Column(
+                      children: [
+                        Text(
+                          'QuoteVault',
+                          style: AppTextStyles.display(context).copyWith(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: -0.5,
+                            fontFamily: GoogleFonts.playfairDisplay().fontFamily,
+                            color: AppColors.kGrey800,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Curated wisdom for your daily life',
+                          style: AppTextStyles.body(context).copyWith(
+                            fontSize: 14,
+                            color: AppColors.kGrey600,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              )),
+
+                // Loader (Optional, depends on initialization time)
+                // Can be kept subtle or removed if init is fast
+                const SizedBox(height: 48),
+                FadeTransition(
+                  opacity: _textFadeAnimation,
+                  child: const SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: AppLoader(
+                      progressColor: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
