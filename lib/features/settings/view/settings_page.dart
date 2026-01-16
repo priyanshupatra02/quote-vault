@@ -43,11 +43,9 @@ class SettingsPage extends ConsumerWidget {
         ),
         title: Text(
           'Profile',
-          style: AppTextStyles.display.copyWith(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+          style: AppTextStyles.pageTitle.copyWith(
+            fontSize: 20,
             color: AppColors.text(context),
-            letterSpacing: -0.015,
           ),
         ),
         actions: [
@@ -91,11 +89,8 @@ class SettingsPage extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                   child: Text(
                     'HEADS UP',
-                    style: AppTextStyles.label.copyWith(
+                    style: AppTextStyles.sectionLabel.copyWith(
                       color: AppColors.textSecondary(context),
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
                     ),
                   ),
                 ),
@@ -116,11 +111,8 @@ class SettingsPage extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
                     child: Text(
                       'DEBUG OPTIONS',
-                      style: AppTextStyles.label.copyWith(
+                      style: AppTextStyles.sectionLabel.copyWith(
                         color: Colors.orange,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 1.0,
                       ),
                     ),
                   ),

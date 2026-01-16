@@ -1,10 +1,15 @@
+import 'dart:io';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
 import 'package:quote_vault/data/model/quote_model.dart';
+import 'package:quote_vault/features/discover/view/pages/quote_card_editor_page.dart';
+import 'package:quote_vault/features/discover/view/widgets/quote_share_card.dart';
 import 'package:quote_vault/features/favorites/controller/pod/favorites_pod.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -35,7 +40,7 @@ class ActionSidebar extends ConsumerWidget {
         SidebarActionButton(
           icon: Icons.ios_share,
           label: 'Share',
-          onTap: () => _handleShare(context),
+          onTap: () => _handleShareInteract(context),
         ),
       ],
     );
@@ -63,9 +68,56 @@ class ActionSidebar extends ConsumerWidget {
     );
   }
 
-  void _handleShare(BuildContext context) {
+  void _handleShareInteract(BuildContext context) {
     if (currentQuote == null) return;
 
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.surface(context),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: Icon(Icons.text_fields, color: AppColors.text(context)),
+              title: Text('Share as Text', style: TextStyle(color: AppColors.text(context))),
+              onTap: () {
+                Navigator.pop(ctx);
+                _shareAsText();
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.image, color: AppColors.text(context)),
+              title: Text('Share Quote Card', style: TextStyle(color: AppColors.text(context))),
+              onTap: () {
+                Navigator.pop(ctx);
+                _shareAsImage(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.auto_awesome, color: AppColors.text(context)),
+              title: Text('Personalize & Save', style: TextStyle(color: AppColors.text(context))),
+              onTap: () {
+                Navigator.pop(ctx);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => QuoteCardEditorPage(quote: currentQuote!),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _shareAsText() {
     final shareText =
         '"${currentQuote!.content}"\n\n— ${currentQuote!.author}\n\nShared via QuoteVault';
 
@@ -73,8 +125,124 @@ class ActionSidebar extends ConsumerWidget {
       shareText,
       subject: 'Quote by ${currentQuote!.author}',
     );
-
     HapticFeedback.lightImpact();
+  }
+
+  void _shareAsImage(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => _SharePreviewDialog(quote: currentQuote!),
+    );
+  }
+}
+
+class _SharePreviewDialog extends StatefulWidget {
+  final QuoteModel quote;
+
+  const _SharePreviewDialog({required this.quote});
+
+  @override
+  State<_SharePreviewDialog> createState() => _SharePreviewDialogState();
+}
+
+class _SharePreviewDialogState extends State<_SharePreviewDialog> {
+  final GlobalKey _globalKey = GlobalKey();
+  bool _isGenerating = false;
+
+  Future<void> _captureAndShare() async {
+    setState(() => _isGenerating = true);
+    try {
+      // 1. Capture Image
+      final boundary = _globalKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) return;
+
+      // Use higher pixel ratio for better quality
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      final pngBytes = byteData!.buffer.asUint8List();
+
+      // 2. Save to Temp File
+      final directory = await getTemporaryDirectory();
+      final imagePath =
+          '${directory.path}/quote_vault_share_${DateTime.now().millisecondsSinceEpoch}.png';
+      final file = File(imagePath);
+      await file.writeAsBytes(pngBytes);
+
+      // 3. Share
+      if (mounted) {
+        final box = context.findRenderObject() as RenderBox?;
+        await Share.shareXFiles(
+          [XFile(imagePath)],
+          text: 'Shared via QuoteVault',
+          sharePositionOrigin: box!.localToGlobal(Offset.zero) & box.size,
+        );
+        if (mounted) Navigator.pop(context); // Close dialog after share
+      }
+    } catch (e) {
+      debugPrint('Error generating image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to generate image: $e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isGenerating = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      insetPadding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Preview Card
+          RepaintBoundary(
+            key: _globalKey,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: QuoteShareCard(
+                quote: widget.quote.content,
+                author: widget.quote.author,
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Action Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _isGenerating ? null : _captureAndShare,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: AppColors.primary,
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              icon: _isGenerating
+                  ? const SizedBox(
+                      width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                  : const Icon(Icons.share),
+              label: Text(
+                _isGenerating ? 'GENERATING...' : 'SHARE IMAGE',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: Colors.white70)),
+          ),
+        ],
+      ),
+    );
   }
 }
 

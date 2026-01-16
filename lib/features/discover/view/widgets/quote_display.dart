@@ -65,10 +65,7 @@ class QuoteDisplay extends StatelessWidget {
               const SizedBox(width: 16),
               Text(
                 author,
-                style: TextStyle(
-                  fontFamily: 'Inter',
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                style: AppTextStyles.sectionLabel.copyWith(
                   color: authorColor,
                   letterSpacing: 2.0,
                 ),
