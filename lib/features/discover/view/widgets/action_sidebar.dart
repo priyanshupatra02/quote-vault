@@ -31,14 +31,6 @@ class ActionSidebar extends ConsumerWidget {
         ),
         const SizedBox(height: 20),
 
-        // Save/Bookmark Button
-        SidebarActionButton(
-          icon: Icons.bookmark_border,
-          label: 'Save',
-          onTap: () => _handleSave(context, ref),
-        ),
-        const SizedBox(height: 20),
-
         // Share Button
         SidebarActionButton(
           icon: Icons.ios_share,
@@ -66,24 +58,6 @@ class ActionSidebar extends ConsumerWidget {
               : 'Added to favorites',
         ),
         duration: const Duration(seconds: 1),
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
-  }
-
-  void _handleSave(BuildContext context, WidgetRef ref) {
-    if (currentQuote == null) return;
-
-    // For now, just add to favorites (same as like)
-    // In a full implementation, this would show a bottom sheet to select/create collection
-    ref.read(favoritesProvider.notifier).addToFavorites(currentQuote!);
-
-    HapticFeedback.lightImpact();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Saved to favorites'),
-        duration: Duration(seconds: 1),
         behavior: SnackBarBehavior.floating,
       ),
     );

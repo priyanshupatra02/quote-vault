@@ -195,29 +195,6 @@ class NotificationService {
     debugPrint('Scheduled ${quotes.length} daily quote notifications starting at $hour:$minute');
   }
 
-  /// Calculate next instance of the specified time with day offset
-  tz.TZDateTime _nextInstanceOfTimeWithOffset(int hour, int minute, int dayOffset) {
-    final now = tz.TZDateTime.now(tz.local);
-    var scheduledDate = tz.TZDateTime(
-      tz.local,
-      now.year,
-      now.month,
-      now.day,
-      hour,
-      minute,
-    );
-
-    // Add day offset
-    scheduledDate = scheduledDate.add(Duration(days: dayOffset));
-
-    // If the first notification time has passed today, start from tomorrow
-    if (dayOffset == 0 && scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-
-    return scheduledDate;
-  }
-
   /// Show immediate notification (for testing)
   Future<void> showTestNotification({
     required String title,
