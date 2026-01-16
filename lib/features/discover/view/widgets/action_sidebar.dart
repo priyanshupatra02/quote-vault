@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:quote_vault/core/theme/app_colors.dart';
+import 'package:quote_vault/core/theme/text_styles.dart';
 import 'package:quote_vault/data/model/quote_model.dart';
 import 'package:quote_vault/features/discover/view/pages/quote_card_editor_page.dart';
 import 'package:quote_vault/features/discover/view/widgets/quote_share_card.dart';
@@ -74,46 +75,95 @@ class ActionSidebar extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.surface(context),
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (ctx) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.text_fields, color: AppColors.text(context)),
-              title: Text('Share as Text', style: TextStyle(color: AppColors.text(context))),
-              onTap: () {
-                Navigator.pop(ctx);
-                _shareAsText();
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.image, color: AppColors.text(context)),
-              title: Text('Share Quote Card', style: TextStyle(color: AppColors.text(context))),
-              onTap: () {
-                Navigator.pop(ctx);
-                _shareAsImage(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.auto_awesome, color: AppColors.text(context)),
-              title: Text('Personalize & Save', style: TextStyle(color: AppColors.text(context))),
-              onTap: () {
-                Navigator.pop(ctx);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => QuoteCardEditorPage(quote: currentQuote!),
+      builder: (ctx) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Handle bar
+                Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.white24 : Colors.black12,
+                    borderRadius: BorderRadius.circular(2),
                   ),
-                );
-              },
+                ),
+                const SizedBox(height: 20),
+                // Header
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [AppColors.primary, AppColors.primary.withOpacity(0.7)],
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.share_rounded, color: Colors.white, size: 20),
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Share Quote',
+                      style: AppTextStyles.pageTitle.copyWith(
+                        fontSize: 18,
+                        color: AppColors.text(context),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // Options
+                _ShareOptionTile(
+                  icon: Icons.text_fields_rounded,
+                  title: 'Share as Text',
+                  subtitle: 'Copy quote to clipboard or share directly',
+                  iconColor: Colors.blue,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _shareAsText();
+                  },
+                ),
+                const SizedBox(height: 10),
+                _ShareOptionTile(
+                  icon: Icons.image_rounded,
+                  title: 'Share Quote Card',
+                  subtitle: 'Beautiful image ready to post',
+                  iconColor: Colors.purple,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _shareAsImage(context);
+                  },
+                ),
+                const SizedBox(height: 10),
+                _ShareOptionTile(
+                  icon: Icons.auto_awesome_rounded,
+                  title: 'Personalize & Save',
+                  subtitle: 'Customize fonts, colors, and backgrounds',
+                  iconColor: Colors.orange,
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => QuoteCardEditorPage(quote: currentQuote!),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -318,6 +368,86 @@ class SidebarActionButton extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// Premium styled option tile for the share bottom sheet
+class _ShareOptionTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final Color iconColor;
+  final VoidCallback onTap;
+
+  const _ShareOptionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.iconColor,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(16),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          decoration: BoxDecoration(
+            color: isDark ? Colors.white.withOpacity(0.05) : Colors.black.withOpacity(0.03),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.05),
+            ),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: iconColor.withOpacity(0.15),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(icon, color: iconColor, size: 22),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: AppTextStyles.label.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.text(context),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle,
+                      style: AppTextStyles.subDetail.copyWith(
+                        fontSize: 12,
+                        color: AppColors.textSecondary(context),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(
+                Icons.chevron_right_rounded,
+                color: AppColors.textSecondary(context).withOpacity(0.5),
+                size: 20,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
